@@ -125,6 +125,40 @@ body {
   font-size: 0.9rem;
 }
 
+.user-profile-btn {
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(56,189,248,.3);
+  background: rgba(56,189,248,.15);
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.user-profile-btn:hover {
+  background: rgba(56,189,248,.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+}
+
+.progress-display {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.progress-display span {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(255,255,255,.1);
+}
+
 .drop-zone {
   position: absolute;
   top: 0;
@@ -903,27 +937,46 @@ body {
 
 <!-- User Profile Modal -->
 <div class="modal-overlay" id="userProfileModal" style="display: none;">
-  <div class="modal" style="max-width: 500px;">
+  <div class="modal" style="max-width: 600px;">
     <div class="modal-title">User Profile & Settings</div>
     <div style="padding: 20px;">
       <div style="margin-bottom: 20px;">
-        <label style="display: block; margin-bottom: 8px; color: var(--accent);">Name:</label>
-        <input type="text" id="userNameInput" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.3); color: #e5e7eb; font-size: 1rem;" />
+        <label style="display: block; margin-bottom: 8px; color: var(--accent); font-weight: 600;">Name:</label>
+        <input type="text" id="userNameInput" placeholder="Enter your name" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.3); color: #e5e7eb; font-size: 1rem;" />
       </div>
       <div style="margin-bottom: 20px;">
-        <label style="display: block; margin-bottom: 8px; color: var(--accent);">Icon (Emoji):</label>
-        <input type="text" id="userIconInput" maxlength="2" style="width: 100px; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.3); color: #e5e7eb; font-size: 1.5rem; text-align: center;" />
+        <label style="display: block; margin-bottom: 8px; color: var(--accent); font-weight: 600;">Icon (Emoji):</label>
+        <input type="text" id="userIconInput" maxlength="2" placeholder="👤" style="width: 100px; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.3); color: #e5e7eb; font-size: 1.5rem; text-align: center;" />
+        <div style="font-size: 0.85rem; color: #9ca3af; margin-top: 5px;">Enter a single emoji (e.g., 👤 🎓 🏥)</div>
       </div>
-      <div style="margin-bottom: 20px; padding: 15px; background: rgba(56,189,248,.1); border-radius: 8px;">
-        <div style="margin-bottom: 10px;"><strong>Progress Stats:</strong></div>
-        <div>Level: <span id="profileLevel">1</span></div>
-        <div>Total Questions: <span id="totalQuestions">0</span></div>
-        <div>Correct Answers: <span id="totalCorrect">0</span></div>
-        <div>GPA: <span id="profileGPA">0.00</span></div>
-        <div>Tests Completed: <span id="testsCompleted">0</span></div>
+      <div style="margin-bottom: 20px; padding: 15px; background: rgba(56,189,248,.1); border-radius: 8px; border: 1px solid rgba(56,189,248,.2);">
+        <div style="margin-bottom: 12px; font-weight: 600; color: var(--accent);"><strong>Progress Stats:</strong></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.95rem;">
+          <div>Level: <span id="profileLevel" style="color: var(--accent); font-weight: 600;">1</span></div>
+          <div>Total Questions: <span id="totalQuestions" style="color: var(--accent); font-weight: 600;">0</span></div>
+          <div style="color: var(--good);">💚 Patients Saved: <span id="patientsSaved" style="color: var(--good); font-weight: 600;">0</span></div>
+          <div style="color: var(--bad);">💀 Patients Lost: <span id="patientsLost" style="color: var(--bad); font-weight: 600;">0</span></div>
+          <div>Correct Answers: <span id="totalCorrect" style="color: var(--good); font-weight: 600;">0</span></div>
+          <div>GPA: <span id="profileGPA" style="color: var(--accent); font-weight: 600;">0.00</span></div>
+          <div style="grid-column: 1 / -1;">Tests Completed: <span id="testsCompleted" style="color: var(--accent); font-weight: 600;">0</span></div>
+        </div>
       </div>
-      <button class="modal-button" onclick="saveUserProfile()" style="width: 100%; margin-top: 10px;">Save Profile</button>
-      <button class="modal-button failure-button" onclick="closeUserProfile()" style="width: 100%; margin-top: 10px; background: rgba(239,68,68,.2);">Close</button>
+      
+      <!-- Danger Zone -->
+      <div class="danger-zone" style="margin-top: 30px; padding: 20px; background: rgba(239,68,68,.15); border: 2px solid rgba(239,68,68,.5); border-radius: 8px;">
+        <div style="color: #ef4444; font-weight: 600; font-size: 1.1rem; margin-bottom: 12px;">⚠️ DANGER ZONE</div>
+        <div style="color: #fca5a5; font-size: 0.9rem; margin-bottom: 15px;">Clearing all data is permanent and cannot be undone. You will lose all progress, scores, and settings.</div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; margin-bottom: 8px; color: #fca5a5; font-weight: 600;">Re-enter your username to confirm:</label>
+          <input type="text" id="confirmUsernameInput" placeholder="Type your username to confirm" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(239,68,68,.5); background: rgba(0,0,0,.4); color: #e5e7eb; font-size: 0.95rem;" />
+        </div>
+        <button id="clearDataBtn" class="danger-button" onclick="confirmClearData()" style="width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #ef4444; background: rgba(239,68,68,.2); color: #ef4444; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(239,68,68,.3)'; this.style.transform='scale(1.02)'" onmouseout="this.style.background='rgba(239,68,68,.2)'; this.style.transform='scale(1)'">Accept and Continue to Clear All Data</button>
+      </div>
+      
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="modal-button" onclick="saveUserProfile()" style="flex: 1; padding: 12px;">Save Profile</button>
+        <button class="modal-button failure-button" onclick="closeUserProfile()" style="flex: 1; padding: 12px; background: rgba(107,114,128,.2);">Close</button>
+      </div>
     </div>
   </div>
 </div>
@@ -974,6 +1027,27 @@ const generalNursingTips = [
   "Report any abnormal findings immediately",
   "Maintain patient privacy and confidentiality at all times",
   "Stay current with evidence-based practice guidelines"
+];
+
+// ============================================================================
+// FAILURE QUOTES - Motivational quotes for failure screen (COD-style)
+// ============================================================================
+const failureQuotes = [
+  "In nursing, hesitation can mean the difference between life and death. Learn from this moment.",
+  "Every mistake is a lesson. Every failure is a chance to grow stronger.",
+  "The best nurses are forged in the fires of their mistakes. Rise from this.",
+  "You failed today, but tomorrow you'll be better. That's what matters.",
+  "A fallen comrade teaches us more than a thousand victories. Honor their memory by improving.",
+  "The path to excellence is paved with failures. You're on the right path.",
+  "This patient is gone, but the next one depends on what you learned here.",
+  "Great nurses aren't born from success - they're forged from failure.",
+  "Remember this moment. Let it drive you to never make this mistake again.",
+  "The weight of a life lost is heavy, but it makes you stronger.",
+  "You let one die, but you'll save hundreds because of what you learned.",
+  "Failure is not the end - it's the beginning of wisdom.",
+  "Every great nurse has lost patients. What matters is what you do next.",
+  "This pain you feel? That's growth. Use it.",
+  "The patient is gone, but their lesson lives on in you."
 ];
 
 // ============================================================================
@@ -1098,19 +1172,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const maxHintsPerQuestion = 3;
   let currentTips = [];
 
-  // Load available categories from inline data
   function loadCategories() {
-    Object.keys(flashcardDecks).forEach(key => {
-      const deck = flashcardDecks[key];
-      const option = document.createElement('option');
-      option.value = key;
-      option.textContent = `${deck.title} - Test ${deck.test}`;
-      categorySelect.appendChild(option);
-    });
+    // Category pages auto-load their specific deck, so this is not needed
+    // But kept for drag-and-drop compatibility
   }
 
   // Load deck from inline data or file
   function loadDeck(deckKey) {
+    // Check if user has a name - required to use app
+    const userData = getUserData();
+    if (!userData || !userData.name || userData.name.trim() === '') {
+      showUserProfile();
+      return;
+    }
+    
     console.log('Loading deck:', deckKey);
     
     // Check if it's an inline deck
@@ -1175,6 +1250,247 @@ document.addEventListener('DOMContentLoaded', () => {
   const tipBanner = document.getElementById('tipBanner');
   const tipText = document.getElementById('tipText');
   const hintButton = document.getElementById('hintButton');
+  const failureScreen = document.getElementById('failureScreen');
+  const failureQuote = document.getElementById('failureQuote');
+  
+  // User Profile Elements
+  const userProfileModal = document.getElementById('userProfileModal');
+  const userNameDisplay = document.getElementById('userName');
+  const userIconDisplay = document.getElementById('userIcon');
+  const userNameInput = document.getElementById('userNameInput');
+  const userIconInput = document.getElementById('userIconInput');
+  const confirmUsernameInput = document.getElementById('confirmUsernameInput');
+  const clearDataBtn = document.getElementById('clearDataBtn');
+  
+  // User Profile Data Storage
+  function getUserData() {
+    try {
+      const stored = localStorage.getItem('fif_lod_userData');
+      if (stored) return JSON.parse(stored);
+    } catch (e) {
+      console.log('localStorage not available:', e);
+    }
+    try {
+      const sessionStored = sessionStorage.getItem('fif_lod_userData');
+      if (sessionStored) return JSON.parse(sessionStored);
+    } catch (e) {
+      console.log('sessionStorage not available:', e);
+    }
+    const cookieData = getCookie('fif_lod_userData');
+    if (cookieData) {
+      try {
+        return JSON.parse(cookieData);
+      } catch (e) {
+        console.log('Cookie parse error:', e);
+      }
+    }
+    return null;
+  }
+  
+  function saveUserData(data) {
+    const dataStr = JSON.stringify(data);
+    try {
+      localStorage.setItem('fif_lod_userData', dataStr);
+    } catch (e) {
+      console.log('localStorage save failed:', e);
+    }
+    try {
+      sessionStorage.setItem('fif_lod_userData', dataStr);
+    } catch (e) {
+      console.log('sessionStorage save failed:', e);
+    }
+    setCookie('fif_lod_userData', dataStr, 365);
+  }
+  
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  }
+  
+  function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = `expires=${date.toUTCString()}`;
+    document.cookie = `${name}=${value};${expires};path=/`;
+  }
+  
+  function clearAllData() {
+    try {
+      localStorage.removeItem('fif_lod_userData');
+      localStorage.removeItem('fif_lod_progress');
+      localStorage.clear();
+    } catch (e) {
+      console.log('localStorage clear failed:', e);
+    }
+    try {
+      sessionStorage.removeItem('fif_lod_userData');
+      sessionStorage.removeItem('fif_lod_progress');
+      sessionStorage.clear();
+    } catch (e) {
+      console.log('sessionStorage clear failed:', e);
+    }
+    document.cookie = 'fif_lod_userData=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
+    document.cookie = 'fif_lod_progress=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => {
+          caches.delete(name);
+        });
+      });
+    }
+  }
+  
+  function loadUserData() {
+    const userData = getUserData();
+    if (userData && userData.name && userData.name.trim() !== '') {
+      if (userNameDisplay) userNameDisplay.textContent = userData.name;
+      if (userIconDisplay) userIconDisplay.textContent = userData.icon || '👤';
+      if (userNameInput) userNameInput.value = userData.name;
+      if (userIconInput) userIconInput.value = userData.icon || '👤';
+      updateProgressDisplay(userData);
+    } else {
+      if (userNameDisplay) userNameDisplay.textContent = 'Guest';
+      if (userIconDisplay) userIconDisplay.textContent = '👤';
+      if (userNameInput) userNameInput.value = '';
+      if (userIconInput) userIconInput.value = '👤';
+      setTimeout(() => {
+        if (userProfileModal) {
+          userProfileModal.style.display = 'grid';
+          userProfileModal.classList.add('show');
+        }
+      }, 500);
+    }
+  }
+  
+  function updateProgressDisplay(userData) {
+    const progress = userData.progress || {};
+    const patientsSaved = progress.patientsSaved || 0;
+    const patientsLost = progress.patientsLost || 0;
+    if (document.getElementById('profileLevel')) {
+      document.getElementById('profileLevel').textContent = progress.level || 1;
+    }
+    if (document.getElementById('totalQuestions')) {
+      document.getElementById('totalQuestions').textContent = progress.totalQuestions || 0;
+    }
+    if (document.getElementById('totalCorrect')) {
+      document.getElementById('totalCorrect').textContent = progress.totalCorrect || 0;
+    }
+    if (document.getElementById('profileGPA')) {
+      const gpa = progress.totalQuestions > 0 ? (progress.totalCorrect / progress.totalQuestions * 4).toFixed(2) : '0.00';
+      document.getElementById('profileGPA').textContent = gpa;
+    }
+    if (document.getElementById('testsCompleted')) {
+      document.getElementById('testsCompleted').textContent = progress.testsCompleted || 0;
+    }
+    if (document.getElementById('patientsSaved')) {
+      document.getElementById('patientsSaved').textContent = patientsSaved;
+    }
+    if (document.getElementById('patientsLost')) {
+      document.getElementById('patientsLost').textContent = patientsLost;
+    }
+    if (document.getElementById('userLevel')) {
+      document.getElementById('userLevel').textContent = progress.level || 1;
+    }
+    if (document.getElementById('userGPA')) {
+      const gpa = progress.totalQuestions > 0 ? (progress.totalCorrect / progress.totalQuestions * 4).toFixed(2) : '0.00';
+      document.getElementById('userGPA').textContent = gpa;
+    }
+  }
+  
+  window.showUserProfile = function() {
+    if (!userProfileModal) return;
+    const userData = getUserData();
+    if (userData) {
+      if (userNameInput) userNameInput.value = userData.name || '';
+      if (userIconInput) userIconInput.value = userData.icon || '👤';
+      updateProgressDisplay(userData);
+    } else {
+      if (userNameInput) userNameInput.value = '';
+      if (userIconInput) userIconInput.value = '👤';
+    }
+    if (userProfileModal.classList.contains('show')) {
+      closeUserProfile();
+    } else {
+      userProfileModal.style.display = 'grid';
+      userProfileModal.classList.add('show');
+    }
+  };
+  
+  window.saveUserProfile = function() {
+    const name = userNameInput ? userNameInput.value.trim() : '';
+    const icon = userIconInput ? userIconInput.value.trim() : '👤';
+    if (!name) {
+      alert('Please enter your name! A name is required to use the app.');
+      return;
+    }
+    const userData = getUserData() || {};
+    userData.name = name;
+    userData.icon = icon || '👤';
+    userData.progress = userData.progress || {
+      level: 1,
+      totalQuestions: 0,
+      totalCorrect: 0,
+      testsCompleted: 0,
+      patientsSaved: 0,
+      patientsLost: 0
+    };
+    saveUserData(userData);
+    if (userNameDisplay) userNameDisplay.textContent = name;
+    if (userIconDisplay) userIconDisplay.textContent = icon || '👤';
+    updateProgressDisplay(userData);
+    closeUserProfile();
+  };
+  
+  window.closeUserProfile = function() {
+    if (!userProfileModal) return;
+    userProfileModal.classList.remove('show');
+    setTimeout(() => {
+      userProfileModal.style.display = 'none';
+      if (confirmUsernameInput) confirmUsernameInput.value = '';
+    }, 300);
+  };
+  
+  window.confirmClearData = function() {
+    if (!confirmUsernameInput || !clearDataBtn) return;
+    const userData = getUserData();
+    const currentUsername = userData ? userData.name : '';
+    const enteredUsername = confirmUsernameInput.value.trim();
+    if (!enteredUsername) {
+      alert('Please enter your username to confirm!');
+      return;
+    }
+    if (enteredUsername !== currentUsername) {
+      alert('Username does not match! Please enter your exact username to confirm deletion.');
+      confirmUsernameInput.value = '';
+      return;
+    }
+    if (!confirm('⚠️ FINAL WARNING: This will permanently delete ALL your data including progress, scores, and settings. This cannot be undone. Are you absolutely sure?')) {
+      return;
+    }
+    clearAllData();
+    if (userNameDisplay) userNameDisplay.textContent = 'Guest';
+    if (userIconDisplay) userIconDisplay.textContent = '👤';
+    if (userNameInput) userNameInput.value = '';
+    if (userIconInput) userIconInput.value = '👤';
+    if (confirmUsernameInput) confirmUsernameInput.value = '';
+    updateProgressDisplay({ progress: { level: 1, totalQuestions: 0, totalCorrect: 0, testsCompleted: 0, patientsSaved: 0, patientsLost: 0 } });
+    alert('All data has been cleared. The page will reload.');
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+  
+  if (userProfileModal) {
+    userProfileModal.addEventListener('click', (e) => {
+      if (e.target === userProfileModal) {
+        closeUserProfile();
+      }
+    });
+  }
+  
+  loadUserData();
 
   function getRandomTip(category = 'phlebotomy') {
     const tipsArray = category.toLowerCase().includes('phlebotomy') ? phlebotomyTips : generalNursingTips;
@@ -1256,19 +1572,35 @@ document.addEventListener('DOMContentLoaded', () => {
     
     tipText.textContent = tip;
     tipBanner.style.display = 'flex';
+    tipBanner.style.opacity = '1';
     hintsUsed++;
     
     // Update hint button if max reached
     if (hintsUsed >= maxHintsPerQuestion) {
-      hintButton.disabled = true;
-      hintButton.textContent = '💡 Max Hints';
+      if (hintButton) {
+        hintButton.disabled = true;
+        hintButton.textContent = '💡 Max Hints';
+      }
     }
     
-    // Auto-hide after 6 seconds
-    setTimeout(() => {
-      closeTipBanner();
-    }, 6000);
+    // Clear any existing timeout
+    if (window.hintTimeout) {
+      clearTimeout(window.hintTimeout);
+    }
+    
+    // Auto-hide after 10 seconds with fade
+    window.hintTimeout = setTimeout(() => {
+      if (tipBanner) {
+        tipBanner.style.opacity = '0';
+        setTimeout(() => {
+          tipBanner.style.display = 'none';
+        }, 500);
+      }
+    }, 10000);
   }
+  
+  // Expose showHint globally
+  window.showHint = showHint;
 
   // Play success sound using Tone.js
   function playSuccessSound() {
@@ -1346,9 +1678,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Text-to-speech function
+  // Remove emojis from text for speech synthesis
+  function removeEmojis(text) {
+    if (!text) return '';
+    // Remove emoji characters (Unicode ranges for emojis)
+    return text.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA00}-\u{1FA6F}]|[\u{1FA70}-\u{1FAFF}]/gu, '').trim();
+  }
+
   function speakText(text, voice = null) {
     if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
+      // Remove emojis before speaking
+      const cleanText = removeEmojis(text);
+      if (!cleanText) return; // Don't speak if no text after emoji removal
+      
+      const utterance = new SpeechSynthesisUtterance(cleanText);
       if (voice) {
         const voices = speechSynthesis.getVoices();
         const selectedVoice = voices.find(v => v.name.includes(voice));
@@ -1367,6 +1710,34 @@ document.addEventListener('DOMContentLoaded', () => {
     modalMessage.textContent = msg;
     successModal.classList.add('show');
     speakText("Excellent work! " + msg);
+  }
+
+  // Show dramatic failure screen (COD-style)
+  const failureQuote = document.getElementById('failureQuote');
+  
+  function showFailureScreen() {
+    if (!failureScreen || !failureQuote) return;
+    
+    // Get random quote
+    const randomQuote = failureQuotes[Math.floor(Math.random() * failureQuotes.length)];
+    failureQuote.textContent = `"${randomQuote}"`;
+    
+    // Show the failure screen
+    failureScreen.style.display = 'flex';
+    failureScreen.classList.add('show');
+    
+    // Hide after 4 seconds and proceed
+    setTimeout(() => {
+      hideFailureScreen();
+    }, 4000);
+  }
+
+  function hideFailureScreen() {
+    if (!failureScreen) return;
+    failureScreen.classList.remove('show');
+    setTimeout(() => {
+      failureScreen.style.display = 'none';
+    }, 500);
   }
 
   // Show failure modal
@@ -1466,12 +1837,23 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Ensure elements exist
+    if (!qText || !aText) {
+      console.error('qText or aText elements not found!');
+      return;
+    }
+
     clearTimer();
     selected = null;
     timedOut = false;
     
     const d = deck[index];
-    qText.textContent = d.q;
+    if (!d || !d.q) {
+      console.error('Invalid card data at index:', index);
+      return;
+    }
+    
+    qText.textContent = d.q || '';
     
     // Show scenario if available
     if (d.scenario) {
@@ -1583,6 +1965,17 @@ document.addEventListener('DOMContentLoaded', () => {
             div.classList.add('correct');
             score++;
             
+            // Track patient saved
+            const userData = getUserData() || {};
+            userData.progress = userData.progress || { level: 1, totalQuestions: 0, totalCorrect: 0, testsCompleted: 0, patientsSaved: 0, patientsLost: 0 };
+            userData.progress.patientsSaved = (userData.progress.patientsSaved || 0) + 1;
+            userData.progress.totalCorrect = (userData.progress.totalCorrect || 0) + 1;
+            userData.progress.totalQuestions = (userData.progress.totalQuestions || 0) + 1;
+            const newLevel = Math.floor(userData.progress.totalQuestions / 10) + 1;
+            userData.progress.level = newLevel;
+            saveUserData(userData);
+            updateProgressDisplay(userData);
+            
             // Play success sound
             playSuccessSound();
             
@@ -1607,8 +2000,21 @@ document.addEventListener('DOMContentLoaded', () => {
               if (correctEl) correctEl.classList.add('correct');
             }
             
+            // Track patient lost
+            const userData = getUserData() || {};
+            userData.progress = userData.progress || { level: 1, totalQuestions: 0, totalCorrect: 0, testsCompleted: 0, patientsSaved: 0, patientsLost: 0 };
+            userData.progress.patientsLost = (userData.progress.patientsLost || 0) + 1;
+            userData.progress.totalQuestions = (userData.progress.totalQuestions || 0) + 1;
+            const newLevel = Math.floor(userData.progress.totalQuestions / 10) + 1;
+            userData.progress.level = newLevel;
+            saveUserData(userData);
+            updateProgressDisplay(userData);
+            
             // Play failure sound
             playFailureSound();
+            
+            // Show dramatic failure screen first (COD-style)
+            showFailureScreen();
             
             // Create death certificate with system time
             const now = new Date();
@@ -1632,7 +2038,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const failureMsg = d.failureMessage || '💀 CRITICAL ERROR: Patient\'s condition deteriorated due to incorrect assessment.';
             aText.innerHTML = d.a + `<div class="failure-message">${failureMsg}</div>` + deathCertificate;
             
-            // Auto-flip to answer after short delay
+            // Auto-flip to answer after failure screen fades (after 4.5 seconds total)
             setTimeout(() => {
               showingAnswer = true;
               card.classList.add('is-flipped');
@@ -1641,7 +2047,7 @@ document.addEventListener('DOMContentLoaded', () => {
               setTimeout(() => {
                 showFailureModal(failureMsg);
               }, 500);
-            }, 800);
+            }, 4500);
           }
         };
         choicesEl.appendChild(div);
@@ -1654,6 +2060,13 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimer();
     closeSuccessModal();
     closeFailureModal();
+    
+    // Track test completion
+    const userData = getUserData() || {};
+    userData.progress = userData.progress || { level: 1, totalQuestions: 0, totalCorrect: 0, testsCompleted: 0, patientsSaved: 0, patientsLost: 0 };
+    userData.progress.testsCompleted = (userData.progress.testsCompleted || 0) + 1;
+    saveUserData(userData);
+    updateProgressDisplay(userData);
     
     const percentage = Math.round((score / deck.length) * 100);
     const passed = percentage >= 70;
@@ -1687,7 +2100,16 @@ document.addEventListener('DOMContentLoaded', () => {
     aImageContainer.innerHTML = '';
   }
 
-  function advance() {
+  function advance(e) {
+    // Prevent event bubbling if called from child elements
+    if (e) {
+      e.stopPropagation();
+      // Don't flip if clicking on interactive elements
+      if (e.target.closest('.choice') || e.target.closest('.hint-button') || e.target.closest('.back-btn') || e.target.closest('button')) {
+        return;
+      }
+    }
+
     if (completed) {
       completed = false;
       index = 0;
@@ -1701,11 +2123,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!showingAnswer) {
-      // Only flip if answer was selected or timer expired (but not if already auto-flipped)
-      if (selected !== null || timedOut) {
-        showingAnswer = true;
-        card.classList.add('is-flipped');
-      }
+      // Always allow tap to reveal answer
+      showingAnswer = true;
+      card.classList.add('is-flipped');
     } else {
       showingAnswer = false;
       card.classList.remove('is-flipped');
@@ -1733,7 +2153,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Add both click and touch event handlers for full compatibility
   card.onclick = advance;
+  card.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    advance(e);
+  }, { passive: false });
 
   // Category selection
 
@@ -1771,8 +2196,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Auto-load med-surg category
-  loadDeck('med-surg');. Select a category or drop a JSON file.');
-  }
+  loadDeck('med-surg');
 });
 </script>
 

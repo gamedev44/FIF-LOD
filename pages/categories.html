@@ -150,6 +150,96 @@ h1 {
     padding: 16px;
   }
 }
+
+/* User Profile Modal Styles */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+}
+
+.modal {
+  background: rgba(17, 24, 39, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: var(--radius);
+  padding: 30px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.show .modal {
+  transform: scale(1);
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.danger-zone {
+  animation: pulse-red-border 2s ease-in-out infinite;
+}
+
+@keyframes pulse-red-border {
+  0%, 100% {
+    border-color: rgba(239,68,68,.5);
+    box-shadow: 0 0 10px rgba(239,68,68,.2);
+  }
+  50% {
+    border-color: rgba(239,68,68,.8);
+    box-shadow: 0 0 20px rgba(239,68,68,.4);
+  }
+}
+
+.modal-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: 1px solid rgba(56,189,248,.3);
+  background: rgba(56,189,248,.15);
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-button:hover {
+  background: rgba(56,189,248,.25);
+  transform: translateY(-2px);
+}
+
+.danger-button {
+  border-color: rgba(239,68,68,.5);
+  background: rgba(239,68,68,.2);
+  color: #ef4444;
+}
+
+.danger-button:hover {
+  background: rgba(239,68,68,.3);
+}
 </style>
 </head>
 <body>
@@ -159,43 +249,406 @@ h1 {
   <h1>Select Training Category</h1>
   
   <div class="category-grid">
-    <a href="categories/anatomy-physiology/" class="category-card">
+    <a href="categories/anatomy-physiology/index.html" class="category-card">
       <div class="category-icon">🧠</div>
       <div class="category-title">Anatomy & Physiology</div>
       <div class="category-desc">Fundamental body systems and functions</div>
     </a>
     
-    <a href="categories/pharmacology/" class="category-card">
+    <!-- Temporarily hidden - will be finished later -->
+    <!--
+    <a href="categories/pharmacology/index.html" class="category-card">
       <div class="category-icon">💊</div>
       <div class="category-title">Pharmacology</div>
       <div class="category-desc">Medications, dosages, and drug interactions</div>
     </a>
     
-    <a href="categories/med-surg/" class="category-card">
+    <a href="categories/med-surg/index.html" class="category-card">
       <div class="category-icon">🏥</div>
       <div class="category-title">Medical-Surgical</div>
       <div class="category-desc">Clinical scenarios and patient care</div>
     </a>
+    -->
     
-    <a href="categories/fundamentals/" class="category-card">
+    <a href="categories/fundamentals/index.html" class="category-card">
       <div class="category-icon">📚</div>
       <div class="category-title">Nursing Fundamentals</div>
       <div class="category-desc">Core nursing principles and procedures</div>
     </a>
     
-    <a href="categories/pathophysiology/" class="category-card">
+    <a href="categories/pathophysiology/index.html" class="category-card">
       <div class="category-icon">🔬</div>
       <div class="category-title">Pathophysiology</div>
       <div class="category-desc">Disease processes and mechanisms</div>
     </a>
     
-    <a href="categories/phlebotomy/" class="category-card">
+    <a href="categories/phlebotomy/index.html" class="category-card">
       <div class="category-icon">🩸</div>
       <div class="category-title">Phlebotomy</div>
       <div class="category-desc">Blood collection, cultures, and safety</div>
     </a>
   </div>
 </div>
+
+<!-- User Profile Modal -->
+<div class="modal-overlay" id="userProfileModal" style="display: none;">
+  <div class="modal" style="max-width: 600px;">
+    <div class="modal-title">User Profile & Settings</div>
+    <div style="padding: 20px;">
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; color: var(--accent); font-weight: 600;">Name:</label>
+        <input type="text" id="userNameInput" placeholder="Enter your name" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.3); color: #e5e7eb; font-size: 1rem;" />
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; color: var(--accent); font-weight: 600;">Icon (Emoji):</label>
+        <input type="text" id="userIconInput" maxlength="2" placeholder="👤" style="width: 100px; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.3); color: #e5e7eb; font-size: 1.5rem; text-align: center;" />
+        <div style="font-size: 0.85rem; color: #9ca3af; margin-top: 5px;">Enter a single emoji (e.g., 👤 🎓 🏥)</div>
+      </div>
+      <div style="margin-bottom: 20px; padding: 15px; background: rgba(56,189,248,.1); border-radius: 8px; border: 1px solid rgba(56,189,248,.2);">
+        <div style="margin-bottom: 12px; font-weight: 600; color: var(--accent);"><strong>Progress Stats:</strong></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.95rem;">
+          <div>Level: <span id="profileLevel" style="color: var(--accent); font-weight: 600;">1</span></div>
+          <div>Total Questions: <span id="totalQuestions" style="color: var(--accent); font-weight: 600;">0</span></div>
+          <div style="color: #22c55e;">💚 Patients Saved: <span id="patientsSaved" style="color: #22c55e; font-weight: 600;">0</span></div>
+          <div style="color: #ef4444;">💀 Patients Lost: <span id="patientsLost" style="color: #ef4444; font-weight: 600;">0</span></div>
+          <div>Correct Answers: <span id="totalCorrect" style="color: #22c55e; font-weight: 600;">0</span></div>
+          <div>GPA: <span id="profileGPA" style="color: var(--accent); font-weight: 600;">0.00</span></div>
+          <div style="grid-column: 1 / -1;">Tests Completed: <span id="testsCompleted" style="color: var(--accent); font-weight: 600;">0</span></div>
+        </div>
+      </div>
+      
+      <!-- Danger Zone -->
+      <div class="danger-zone" style="margin-top: 30px; padding: 20px; background: rgba(239,68,68,.15); border: 2px solid rgba(239,68,68,.5); border-radius: 8px;">
+        <div style="color: #ef4444; font-weight: 600; font-size: 1.1rem; margin-bottom: 12px;">⚠️ DANGER ZONE</div>
+        <div style="color: #fca5a5; font-size: 0.9rem; margin-bottom: 15px;">Clearing all data is permanent and cannot be undone. You will lose all progress, scores, and settings.</div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; margin-bottom: 8px; color: #fca5a5; font-weight: 600;">Re-enter your username to confirm:</label>
+          <input type="text" id="confirmUsernameInput" placeholder="Type your username to confirm" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(239,68,68,.5); background: rgba(0,0,0,.4); color: #e5e7eb; font-size: 0.95rem;" />
+        </div>
+        <button id="clearDataBtn" class="danger-button" onclick="confirmClearData()" style="width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #ef4444; background: rgba(239,68,68,.2); color: #ef4444; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(239,68,68,.3)'; this.style.transform='scale(1.02)'" onmouseout="this.style.background='rgba(239,68,68,.2)'; this.style.transform='scale(1)'">Accept and Continue to Clear All Data</button>
+      </div>
+      
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="modal-button" onclick="saveUserProfile()" style="flex: 1; padding: 12px;">Save Profile</button>
+        <button class="modal-button danger-button" onclick="closeUserProfile()" style="flex: 1; padding: 12px; background: rgba(107,114,128,.2); border-color: rgba(107,114,128,.3); color: #9ca3af;">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================================
+// USER PROFILE SYSTEM - localStorage, sessionStorage, cookies
+// ============================================================================
+
+let userProfileModal, userNameInput, userIconInput, confirmUsernameInput, clearDataBtn;
+
+document.addEventListener('DOMContentLoaded', () => {
+  userProfileModal = document.getElementById('userProfileModal');
+  userNameInput = document.getElementById('userNameInput');
+  userIconInput = document.getElementById('userIconInput');
+  confirmUsernameInput = document.getElementById('confirmUsernameInput');
+  clearDataBtn = document.getElementById('clearDataBtn');
+  
+  // Load user data on page load
+  loadUserData();
+  
+  // Prevent category access if no name is set
+  const categoryCards = document.querySelectorAll('.category-card');
+  categoryCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const userData = getUserData();
+      if (!userData || !userData.name || userData.name.trim() === '') {
+        e.preventDefault();
+        e.stopPropagation();
+        // Show modal if trying to access without name
+        if (userProfileModal) {
+          userProfileModal.style.display = 'grid';
+          userProfileModal.classList.add('show');
+        }
+        alert('Please enter your name first! A name is required to access training categories.');
+        return false;
+      }
+    });
+  });
+  
+  // Close modal when clicking outside (but prevent closing if no name is set)
+  if (userProfileModal) {
+    userProfileModal.addEventListener('click', (e) => {
+      if (e.target === userProfileModal) {
+        const userData = getUserData();
+        // Don't allow closing if no name is set
+        if (!userData || !userData.name || userData.name.trim() === '') {
+          return;
+        }
+        closeUserProfile();
+      }
+    });
+  }
+});
+
+function getUserData() {
+  try {
+    const stored = localStorage.getItem('fif_lod_userData');
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (e) {
+    console.log('localStorage not available:', e);
+  }
+  
+  try {
+    const sessionStored = sessionStorage.getItem('fif_lod_userData');
+    if (sessionStored) {
+      return JSON.parse(sessionStored);
+    }
+  } catch (e) {
+    console.log('sessionStorage not available:', e);
+  }
+  
+  const cookieData = getCookie('fif_lod_userData');
+  if (cookieData) {
+    try {
+      return JSON.parse(cookieData);
+    } catch (e) {
+      console.log('Cookie parse error:', e);
+    }
+  }
+  
+  return null;
+}
+
+function saveUserData(data) {
+  const dataStr = JSON.stringify(data);
+  
+  try {
+    localStorage.setItem('fif_lod_userData', dataStr);
+  } catch (e) {
+    console.log('localStorage save failed:', e);
+  }
+  
+  try {
+    sessionStorage.setItem('fif_lod_userData', dataStr);
+  } catch (e) {
+    console.log('sessionStorage save failed:', e);
+  }
+  
+  setCookie('fif_lod_userData', dataStr, 365);
+}
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+}
+
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+  const expires = `expires=${date.toUTCString()}`;
+  document.cookie = `${name}=${value};${expires};path=/`;
+}
+
+function clearAllData() {
+  try {
+    localStorage.removeItem('fif_lod_userData');
+    localStorage.removeItem('fif_lod_progress');
+    localStorage.clear();
+  } catch (e) {
+    console.log('localStorage clear failed:', e);
+  }
+  
+  try {
+    sessionStorage.removeItem('fif_lod_userData');
+    sessionStorage.removeItem('fif_lod_progress');
+    sessionStorage.clear();
+  } catch (e) {
+    console.log('sessionStorage clear failed:', e);
+  }
+  
+  document.cookie = 'fif_lod_userData=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
+  document.cookie = 'fif_lod_progress=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
+  
+  if ('caches' in window) {
+    caches.keys().then(names => {
+      names.forEach(name => {
+        caches.delete(name);
+      });
+    });
+  }
+}
+
+function loadUserData() {
+  const userData = getUserData();
+  if (userData && userData.name && userData.name.trim() !== '') {
+    // User has a name - load their data
+    if (userNameInput) userNameInput.value = userData.name;
+    if (userIconInput) userIconInput.value = userData.icon || '👤';
+    
+    // Load progress stats
+    updateProgressDisplay(userData);
+    
+    // Enable category cards
+    enableCategoryCards(true);
+  } else {
+    // No name set - show modal immediately
+    if (userNameInput) userNameInput.value = '';
+    if (userIconInput) userIconInput.value = '👤';
+    
+    // Disable category cards until name is set
+    enableCategoryCards(false);
+    
+    // Show modal immediately - name is required
+    setTimeout(() => {
+      if (userProfileModal) {
+        userProfileModal.style.display = 'grid';
+        userProfileModal.classList.add('show');
+      }
+    }, 500);
+  }
+}
+
+function enableCategoryCards(enabled) {
+  const categoryCards = document.querySelectorAll('.category-card');
+  categoryCards.forEach(card => {
+    if (enabled) {
+      card.style.opacity = '1';
+      card.style.pointerEvents = 'auto';
+      card.style.cursor = 'pointer';
+    } else {
+      card.style.opacity = '0.5';
+      card.style.pointerEvents = 'none';
+      card.style.cursor = 'not-allowed';
+    }
+  });
+}
+
+function updateProgressDisplay(userData) {
+  const progress = userData.progress || {};
+  const patientsSaved = progress.patientsSaved || 0;
+  const patientsLost = progress.patientsLost || 0;
+  
+  if (document.getElementById('profileLevel')) {
+    document.getElementById('profileLevel').textContent = progress.level || 1;
+  }
+  if (document.getElementById('totalQuestions')) {
+    document.getElementById('totalQuestions').textContent = progress.totalQuestions || 0;
+  }
+  if (document.getElementById('totalCorrect')) {
+    document.getElementById('totalCorrect').textContent = progress.totalCorrect || 0;
+  }
+  if (document.getElementById('profileGPA')) {
+    const gpa = progress.totalQuestions > 0 ? (progress.totalCorrect / progress.totalQuestions * 4).toFixed(2) : '0.00';
+    document.getElementById('profileGPA').textContent = gpa;
+  }
+  if (document.getElementById('testsCompleted')) {
+    document.getElementById('testsCompleted').textContent = progress.testsCompleted || 0;
+  }
+  if (document.getElementById('patientsSaved')) {
+    document.getElementById('patientsSaved').textContent = patientsSaved;
+  }
+  if (document.getElementById('patientsLost')) {
+    document.getElementById('patientsLost').textContent = patientsLost;
+  }
+}
+
+function showUserProfile() {
+  if (!userProfileModal) return;
+  const userData = getUserData();
+  if (userData) {
+    if (userNameInput) userNameInput.value = userData.name || '';
+    if (userIconInput) userIconInput.value = userData.icon || '👤';
+    updateProgressDisplay(userData);
+  } else {
+    if (userNameInput) userNameInput.value = '';
+    if (userIconInput) userIconInput.value = '👤';
+  }
+  
+  // Toggle modal (show if hidden, hide if shown)
+  if (userProfileModal.classList.contains('show')) {
+    closeUserProfile();
+  } else {
+    userProfileModal.style.display = 'grid';
+    userProfileModal.classList.add('show');
+  }
+}
+
+function saveUserProfile() {
+  const name = userNameInput ? userNameInput.value.trim() : '';
+  const icon = userIconInput ? userIconInput.value.trim() : '👤';
+  
+  if (!name) {
+    alert('Please enter your name! A name is required to use the app.');
+    return;
+  }
+  
+  const userData = getUserData() || {};
+  userData.name = name;
+  userData.icon = icon || '👤';
+  userData.progress = userData.progress || {
+    level: 1,
+    totalQuestions: 0,
+    totalCorrect: 0,
+    testsCompleted: 0,
+    patientsSaved: 0,
+    patientsLost: 0
+  };
+  
+  saveUserData(userData);
+  updateProgressDisplay(userData);
+  
+  // Enable category cards after saving name
+  enableCategoryCards(true);
+  
+  closeUserProfile();
+}
+
+function closeUserProfile() {
+  if (!userProfileModal) return;
+  userProfileModal.classList.remove('show');
+  setTimeout(() => {
+    userProfileModal.style.display = 'none';
+    if (confirmUsernameInput) confirmUsernameInput.value = '';
+  }, 300);
+}
+
+function confirmClearData() {
+  if (!confirmUsernameInput || !clearDataBtn) return;
+  
+  const userData = getUserData();
+  const currentUsername = userData ? userData.name : '';
+  const enteredUsername = confirmUsernameInput.value.trim();
+  
+  if (!enteredUsername) {
+    alert('Please enter your username to confirm!');
+    return;
+  }
+  
+  if (enteredUsername !== currentUsername) {
+    alert('Username does not match! Please enter your exact username to confirm deletion.');
+    confirmUsernameInput.value = '';
+    return;
+  }
+  
+  if (!confirm('⚠️ FINAL WARNING: This will permanently delete ALL your data including progress, scores, and settings. This cannot be undone. Are you absolutely sure?')) {
+    return;
+  }
+  
+  clearAllData();
+  
+  if (userNameInput) userNameInput.value = '';
+  if (userIconInput) userIconInput.value = '👤';
+  if (confirmUsernameInput) confirmUsernameInput.value = '';
+  
+  updateProgressDisplay({ progress: { level: 1, totalQuestions: 0, totalCorrect: 0, testsCompleted: 0, patientsSaved: 0, patientsLost: 0 } });
+  
+  alert('All data has been cleared. The page will reload.');
+  setTimeout(() => {
+    window.location.reload();
+  }, 1000);
+}
+</script>
 </body>
 </html>
 
