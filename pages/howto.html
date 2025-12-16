@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+<title>Failure Is Fatal : Life Or Death - How to Use</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="How to use Failure Is Fatal : Life Or Death training simulator" />
+<meta name="author" content="Asterisk" />
+<meta name="owner" content="Kaitlyn Foreman" />
+<style>
+:root {
+  --bg: #0b0e14;
+  --card: #111827;
+  --accent: #38bdf8;
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(1200px 600px at 50% 0%, #111827, var(--bg));
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
+  color: #e5e7eb;
+  padding: 20px;
+}
+
+.container {
+  max-width: 700px;
+  width: 100%;
+  background: linear-gradient(135deg, #020617, var(--card));
+  border-radius: var(--radius);
+  padding: clamp(20px, 5vw, 40px);
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.1);
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    margin: 16px;
+    max-width: calc(100% - 32px);
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.2rem;
+  }
+  
+  pre {
+    font-size: 0.8rem;
+    padding: 12px;
+    overflow-x: auto;
+  }
+  
+  code {
+    font-size: 0.85em;
+  }
+}
+
+h1 {
+  margin-top: 0;
+  color: var(--accent);
+}
+
+.back-btn {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: rgba(56,189,248,.15);
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid rgba(56,189,248,.3);
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: rgba(56,189,248,.25);
+}
+
+h2 {
+  color: var(--accent);
+  margin-top: 30px;
+  font-size: 1.3rem;
+}
+
+p, li {
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+code {
+  background: rgba(0,0,0,.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  background: rgba(0,0,0,.3);
+  padding: 15px;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid rgba(255,255,255,.1);
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="home.html" class="back-btn">← Back to Home</a>
+  <h1>How to Use</h1>
+  
+  <h2>Training with Scenarios</h2>
+  <ol>
+    <li>Click "Begin Training" from the home page</li>
+    <li>Select a nursing category (Anatomy, Pharmacology, Med-Surg, etc.) or load a custom JSON file</li>
+    <li>Read the question and select your answer</li>
+    <li>Tap the card to flip and see the detailed explanation</li>
+    <li>Tap again to continue to the next question</li>
+    <li>Use the ← button to review previous questions</li>
+    <li>Track your score to monitor your knowledge retention</li>
+  </ol>
+
+  <h2>Loading Scenario Files</h2>
+  <p>You can load scenario sets by:</p>
+  <ol>
+    <li><strong>Select from categories:</strong> Choose a category from the dropdown menu</li>
+    <li><strong>Drag and drop:</strong> Drag a JSON file onto the training page to load it</li>
+  </ol>
+
+  <h2>Creating Your Own Scenarios</h2>
+  <p>Edit <code>pages/flashtest.html</code> and add to the <code>flashcardDecks</code> object. Perfect for creating custom scenario sets for specific exams or topics:</p>
+  <pre>{
+  "title": "Category Name (e.g., Cardiac Nursing)",
+  "test": 1,
+  "category": "CategoryName",
+  "cards": [
+    {
+      "id": "q1",
+      "category": "CategoryName",
+      "test": 1,
+      "q": "Your nursing question here?",
+      "choices": ["Option A", "Option B", "Option C"],
+      "correct": 0,
+      "a": "Detailed explanation of the correct answer with nursing rationale",
+      "scenario": "🚨 EMERGENCY: Your scenario description",
+      "timer": 30,
+      "successMessage": "✅ Patient's condition is improving!",
+      "failureMessage": "💀 Patient died!",
+      "causeOfDeath": "Cause of death text",
+      "timeoutMessage": "⏱️ Time ran out!",
+      "image": "optional-image-path.jpg",
+      "answerImage": "optional-answer-image.jpg"
+    }
+  ]
+}</pre>
+  <p><strong>File-level Fields:</strong></p>
+  <ul>
+    <li><code>title</code> - Category name (e.g., "Cardiac Nursing") (required)</li>
+    <li><code>test</code> - Test number for this quiz set (required)</li>
+    <li><code>category</code> - Category name matching card categories (required)</li>
+    <li><code>cards</code> - Array of scenario objects (required)</li>
+  </ul>
+  <p><strong>Card-level Fields:</strong></p>
+  <ul>
+    <li><code>id</code> - Question ID (q1, q2, etc.) (required)</li>
+    <li><code>category</code> - Category name (required)</li>
+    <li><code>test</code> - Test number (required)</li>
+    <li><code>scenario</code> - Emergency scenario text (optional but recommended)</li>
+    <li><code>timer</code> - Time limit in seconds (optional)</li>
+    <li><code>q</code> - Question text (required)</li>
+    <li><code>choices</code> - Array of answer choices (required)</li>
+    <li><code>correct</code> - Index of correct answer (0-based, required)</li>
+    <li><code>a</code> - Answer explanation with nursing rationale (required)</li>
+    <li><code>successMessage</code> - Message shown on correct answer (optional)</li>
+    <li><code>failureMessage</code> - Message shown on wrong answer (optional)</li>
+    <li><code>causeOfDeath</code> - Cause of death for death certificate (optional)</li>
+    <li><code>timeoutMessage</code> - Message shown when time runs out (optional)</li>
+    <li><code>image</code> - Optional image path (anatomy diagrams, medication images, etc.)</li>
+    <li><code>answerImage</code> - Optional image path for answer side</li>
+  </ul>
+</div>
+</body>
+</html>
+

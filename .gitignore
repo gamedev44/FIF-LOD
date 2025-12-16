@@ -1,0 +1,20 @@
+# Server files (optional - remove if you want to commit them)
+# server.py
+# server.js
+# start-server.bat
+# start-server.ps1
+
+# Node modules (if using npm)
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+

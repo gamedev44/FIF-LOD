@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+<title>Failure Is Fatal : Life Or Death - Loading</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="Intense scenario-based training simulator for nursing students." />
+<meta name="author" content="Asterisk" />
+<meta name="owner" content="Kaitlyn Foreman" />
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(1200px 600px at 50% 0%, #111827, #0b0e14);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
+  color: #e5e7eb;
+}
+.loader {
+  text-align: center;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+</style>
+</head>
+<body>
+<div class="loader">
+  <h1>Loading...</h1>
+</div>
+<script>
+setTimeout(() => {
+  window.location.href = 'home.html';
+}, 800);
+</script>
+</body>
+</html>
+
