@@ -8,7 +8,7 @@
 
 **Intense scenario-based training simulator for nursing students.** Experience the pressure of real medical emergencies where every decision matters. High-stakes scenarios with timers, consequences, and realistic patient outcomes.
 
-**Developer:** [Asterisk](https://github.com/yourusername)  
+**Developer:** [Asterisk](https://github.com/gamedev44/)  
 **Owner & Idea:** Kaitlyn Foreman
 
 ---
