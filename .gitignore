@@ -1,10 +1,4 @@
-# Server files (optional - remove if you want to commit them)
-# server.py
-# server.js
-# start-server.bat
-# start-server.ps1
-
-# Node modules (if using npm)
+# Node modules
 node_modules/
 
 # OS files

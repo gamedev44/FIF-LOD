@@ -199,6 +199,44 @@ body {
   align-items: center;
   gap: 14px;
   overflow-y: auto;
+  overflow-x: hidden;
+  /* Hide scrollbar by default, show custom if needed */
+  scrollbar-width: thin; /* Firefox - thin scrollbar */
+  scrollbar-color: var(--accent) rgba(0,0,0,.3); /* Firefox - thumb and track colors */
+  -ms-overflow-style: none; /* IE and Edge - hide */
+}
+
+/* Custom scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+.content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: rgba(0,0,0,.2);
+  border-radius: 10px;
+  margin: 4px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent), #60a5fa);
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.2);
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #60a5fa, var(--accent));
+}
+
+/* Hide scrollbar on mobile/touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .content {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .content::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .card-image {

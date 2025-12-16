@@ -43,18 +43,9 @@ See [LICENSE](LICENSE) for full terms.
 
 ## Quick Start
 
-### Option 1: Direct Access
-Simply open `pages/index.html` in your browser.
+Simply open `pages/index.html` in your browser, or visit the GitHub Pages site.
 
-### Option 2: Local Server (Recommended)
-```bash
-cd scripts
-python server.py
-# or
-node server.js
-```
-
-Then open: http://localhost:8000
+**GitHub Pages:** https://gamedev44.github.io/FIF-LOD/
 
 ## Project Structure
 
@@ -65,7 +56,6 @@ Then open: http://localhost:8000
 │   ├── flashtest.html # Main flashcard app (all data inline)
 │   ├── info.html    # About page
 │   └── howto.html   # Instructions
-├── scripts/         # Server scripts for local development
 ├── assets/          # Future assets folder
 └── docs/            # Documentation
 ```
