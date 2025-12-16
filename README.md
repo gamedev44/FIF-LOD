@@ -30,16 +30,22 @@ See [LICENSE](LICENSE) for full terms.
 
 ## Features
 
-- 🎴 **3D Card Flip Animations** - Beautiful CSS 3D transforms
+- 🎴 **3D Card Flip Animations** - Beautiful CSS 3D transforms with glassmorphism styling
 - ⏱️ **Scenario-Based Learning** - Realistic emergency scenarios with countdown timers
 - 🔊 **Sound Effects** - Success sounds, failure "woa woa woaaaa", alert sounds for failed tests, victory sounds for passed tests
 - 🗣️ **Text-to-Speech** - Audio feedback for all modal messages
 - 💀 **Death Certificates** - Realistic consequences with system timestamps, cause of death, time and date
 - 📊 **Score Tracking** - Pass/fail with 70% threshold
-- 📱 **Responsive Design** - Works on all devices
+- 📱 **Fully Responsive Design** - Optimized for mobile, tablet, and desktop
 - 🎯 **All Data Inline** - No external files needed, works everywhere
 - 🚨 **Auto-Flip on Answer** - Cards automatically flip on correct/incorrect answers
 - 🎉 **Success Modals** - Patient health progression feedback
+- 💡 **Tips & Hints System** - Contextual tips with auto-display and manual hint button
+- ⏳ **Loading Screens** - Rotating tips between questions with progress indicators
+- 👤 **User Profile** - Customizable name and icon with progress tracking
+- 📚 **Organized Categories** - Separate pages for each category (Anatomy, Pharmacology, Med-Surg, Fundamentals, Pathophysiology, Phlebotomy)
+- 🎨 **Custom Cursor** - Medicine pill-themed cursor for PC users
+- 🔒 **Progress Tracking** - Local storage for user progress, levels, and GPA
 
 ## Quick Start
 
@@ -50,19 +56,48 @@ Simply open `pages/index.html` in your browser, or visit the GitHub Pages site.
 ## Project Structure
 
 ```
-├── pages/           # All HTML pages
-│   ├── index.html   # Loader page
-│   ├── home.html    # Main menu
-│   ├── flashtest.html # Main flashcard app (all data inline)
-│   ├── info.html    # About page
-│   └── howto.html   # Instructions
-├── assets/          # Future assets folder
-└── docs/            # Documentation
+├── index.html              # Root loader page
+├── pages/
+│   ├── index.html          # Pages loader
+│   ├── home.html           # Main menu
+│   ├── categories.html     # Category selection
+│   ├── categories/         # Category pages
+│   │   ├── anatomy-physiology/
+│   │   │   └── index.html
+│   │   ├── pharmacology/
+│   │   │   └── index.html
+│   │   ├── med-surg/
+│   │   │   └── index.html
+│   │   ├── fundamentals/
+│   │   │   └── index.html
+│   │   ├── pathophysiology/
+│   │   │   └── index.html
+│   │   └── phlebotomy/
+│   │       └── index.html
+│   ├── info/               # Info page folder
+│   │   └── index.html
+│   └── howto/              # How-to page folder
+│       └── index.html
+├── assets/                 # Assets folder
+└── docs/                   # Documentation
 ```
+
+## Categories
+
+The app includes comprehensive training categories:
+
+- 🧠 **Anatomy & Physiology** - Fundamental body systems and functions
+- 💊 **Pharmacology** - Medications, dosages, and drug interactions
+- 🏥 **Medical-Surgical** - Clinical scenarios and patient care
+- 📚 **Nursing Fundamentals** - Core nursing principles and procedures
+- 🔬 **Pathophysiology** - Disease processes and mechanisms
+- 🩸 **Phlebotomy** - Blood collection, cultures, order of draw, and safety (60+ questions)
+
+Each category has its own dedicated page with comprehensive questions ranging from 3-15+ questions per test, with difficulty increasing by level.
 
 ## Adding New Scenarios
 
-Edit `pages/flashtest.html` and add to the `flashcardDecks` object:
+Edit the category HTML files in `pages/categories/[category-name]/index.html` and add to the `flashcardDecks` object:
 
 ```javascript
 'new-category': {

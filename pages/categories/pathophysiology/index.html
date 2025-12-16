@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<!--
+  ⚠️ LEGAL NOTICE ⚠️
+  This source code is VIEWABLE for educational purposes only.
+  MODIFICATION IS STRICTLY PROHIBITED without explicit written permission.
+  Unauthorized modification may violate the Economic Espionage Act and other laws.
+  Violators may face criminal prosecution and civil penalties.
+  
+  Developer: Asterisk
+  Owner & Idea: Kaitlyn Foreman
+  See LICENSE file for full terms.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+<title>Failure Is Fatal : Life Or Death - Pathophysiology</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="Intense scenario-based training simulator for nursing students. Experience real medical emergencies where every decision matters. High-stakes scenarios with timers and realistic patient outcomes." />
+<meta name="keywords" content="nursing training, medical scenarios, nursing education, NCLEX prep, medical simulation, nursing students" />
+<meta name="author" content="Asterisk" />
+<meta name="owner" content="Kaitlyn Foreman" />
+<meta name="robots" content="index, follow" />
+
+<!-- Open Graph / Facebook / Discord -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://gamedev44.github.io/FIF-LOD/pages/flashtest.html" />
+<meta property="og:title" content="Failure Is Fatal : Life Or Death" />
+<meta property="og:description" content="Intense scenario-based training simulator for nursing students. Experience real medical emergencies where every decision matters." />
+<meta property="og:image" content="https://gamedev44.github.io/FIF-LOD/assets/og-image.png" />
+<meta property="og:site_name" content="Failure Is Fatal : Life Or Death" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://gamedev44.github.io/FIF-LOD/pages/flashtest.html" />
+<meta name="twitter:title" content="Failure Is Fatal : Life Or Death" />
+<meta name="twitter:description" content="Intense scenario-based training simulator for nursing students. Experience real medical emergencies where every decision matters." />
+<meta name="twitter:image" content="https://gamedev44.github.io/FIF-LOD/assets/twitter-image.png" />
+<meta name="twitter:creator" content="@gamedev44" />
+
+<!-- Discord uses Open Graph tags above -->
+<!-- Custom Medicine Pill Cursor -->
+<style type="text/css">
+body, * {
+  cursor: url('http://www.rw-designer.com/cursor-extern.php?id=190554'), auto;
+}
+button, a, .choice, .hint-button, .modal-button, .loading-continue-btn, .tip-close {
+  cursor: url('http://www.rw-designer.com/cursor-extern.php?id=190554'), pointer;
+}
+</style>
+<style>
+:root {
+  --card-w: min(92vw, 420px);
+  --card-h: min(80vh, 640px);
+  --radius: 18px;
+  --dur: 0.7s;
+  --bg: #0b0e14;
+  --front: #111827;
+  --back: #020617;
+  --accent: #38bdf8;
+  --good: #22c55e;
+  --bad: #ef4444;
+  
+  /* Responsive sizing */
+  --base-font-size: clamp(14px, 2.5vw, 16px);
+  --heading-size: clamp(1.5rem, 4vw, 2.5rem);
+  --button-padding: clamp(12px, 2vw, 20px);
+  --container-padding: clamp(16px, 4vw, 40px);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(1200px 600px at 50% 0%, #111827, var(--bg));
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
+  color: #e5e7eb;
+}
+
+.scene {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  perspective: 1600px;
+  touch-action: manipulation;
+  position: relative;
+}
+
+.controls {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  z-index: 10;
+}
+
+.back-home {
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(56,189,248,.15);
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.9rem;
+  border: 1px solid rgba(56,189,248,.3);
+}
+
+.category-select {
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(0,0,0,.3);
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.drop-zone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  place-items: center;
+  background: rgba(0,0,0,.8);
+  z-index: 100;
+  border: 3px dashed var(--accent);
+}
+
+.drop-zone.active {
+  display: grid;
+}
+
+.drop-zone-text {
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+.card {
+  width: var(--card-w);
+  height: var(--card-h);
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform var(--dur) cubic-bezier(.22,1,.36,1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.card.is-flipped { transform: rotateY(180deg); }
+
+.face {
+  position: absolute;
+  inset: 0;
+  padding: 24px;
+  border-radius: var(--radius);
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Glassmorphism styling */
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.front {
+  background: linear-gradient(135deg, rgba(2, 6, 23, 0.8), rgba(17, 24, 39, 0.7));
+}
+
+.back {
+  background: linear-gradient(135deg, rgba(2, 6, 23, 0.8), rgba(2, 6, 23, 0.7));
+  transform: rotateY(180deg);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.back-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(56,189,248,.15);
+  color: var(--accent);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.qnum { font-size: .8rem; opacity: .7; }
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Hide scrollbar by default, show custom if needed */
+  scrollbar-width: thin; /* Firefox - thin scrollbar */
+  scrollbar-color: var(--accent) rgba(0,0,0,.3); /* Firefox - thumb and track colors */
+  -ms-overflow-style: none; /* IE and Edge - hide */
+}
+
+/* Custom scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+.content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: rgba(0,0,0,.2);
+  border-radius: 10px;
+  margin: 4px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent), #60a5fa);
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.2);
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #60a5fa, var(--accent));
+}
+
+/* Hide scrollbar on mobile/touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .content {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .content::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.card-image {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: contain;
+  margin: 10px 0;
+}
+
+.choices {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.choice {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.choice:hover {
+  background: rgba(255,255,255,.08);
+}
+
+.choice.selected { outline: 2px solid var(--accent); }
+.choice.correct { background: rgba(34,197,94,.2); }
+.choice.wrong { background: rgba(239,68,68,.2); }
+
+.hint { font-size: .7rem; opacity: .6; align-self: flex-end; }
+
+.loading {
+  text-align: center;
+  padding: 40px;
+}
+
+.error {
+  text-align: center;
+  padding: 40px;
+  color: var(--bad);
+}
+
+.scenario {
+  background: rgba(239,68,68,.15);
+  border-left: 4px solid var(--bad);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.scenario-text {
+  font-weight: 600;
+  color: #fca5a5;
+  margin-bottom: 8px;
+}
+
+.timer {
+  background: rgba(239,68,68,.2);
+  border: 2px solid var(--bad);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--bad);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.timer.warning {
+  animation: pulse 0.5s ease-in-out infinite;
+  background: rgba(239,68,68,.4);
+}
+
+.failure-message {
+  background: rgba(239,68,68,.2);
+  border: 2px solid var(--bad);
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  color: var(--bad);
+  font-weight: 600;
+  text-align: center;
+}
+
+.death-certificate {
+  background: rgba(0,0,0,.5);
+  border: 3px solid var(--bad);
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 16px;
+  color: var(--bad);
+  font-family: 'Courier New', monospace;
+}
+
+.death-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--bad);
+  padding-bottom: 8px;
+}
+
+.death-info {
+  line-height: 2;
+  font-size: 0.9rem;
+}
+
+.death-info div {
+  margin: 8px 0;
+}
+
+.success-message {
+  background: rgba(34,197,94,.2);
+  border: 2px solid var(--good);
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  color: var(--good);
+  font-weight: 600;
+  text-align: center;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,.8);
+  display: none;
+  place-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.show {
+  display: grid;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal {
+  background: linear-gradient(135deg, #020617, var(--front));
+  border-radius: var(--radius);
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  border: 2px solid var(--good);
+  animation: slideUp 0.4s ease;
+}
+
+.modal-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.modal-title {
+  font-size: 2rem;
+  color: var(--good);
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+
+.modal-message {
+  font-size: 1.2rem;
+  color: #e5e7eb;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.modal-button {
+  padding: 12px 32px;
+  border-radius: 12px;
+  border: none;
+  background: var(--good);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-button:hover {
+  background: #16a34a;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(34,197,94,.3);
+}
+
+.failure-modal {
+  border-color: var(--bad);
+}
+
+.failure-button {
+  background: var(--bad);
+}
+
+.failure-button:hover {
+  background: #dc2626;
+  box-shadow: 0 10px 20px rgba(239,68,68,.3);
+}
+
+/* Responsive Design - Mobile First */
+@media screen and (max-width: 768px) {
+  :root {
+    --card-w: min(95vw, 380px);
+    --card-h: min(75vh, 600px);
+    --radius: 14px;
+  }
+  
+  .controls {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    gap: 8px;
+  }
+  
+  .back-home, .category-select {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  
+  .card {
+    width: var(--card-w);
+    height: var(--card-h);
+  }
+  
+  .face {
+    padding: 16px;
+  }
+  
+  .content h2 {
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+  }
+  
+  .choice {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+  
+  .timer {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .modal {
+    padding: 24px;
+    max-width: 90vw;
+  }
+  
+  .modal-icon {
+    font-size: 3rem;
+  }
+  
+  .modal-title {
+    font-size: 1.5rem;
+  }
+  
+  .modal-message {
+    font-size: 1rem;
+  }
+  
+  .scenario {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+  
+  .death-certificate {
+    padding: 16px;
+    font-size: 0.85rem;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --card-w: min(85vw, 400px);
+    --card-h: min(78vh, 620px);
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  :root {
+    --card-w: min(92vw, 420px);
+    --card-h: min(80vh, 640px);
+  }
+  
+  .controls {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* Landscape mobile optimization */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --card-h: min(90vh, 500px);
+  }
+  
+  .face {
+    padding: 12px;
+  }
+  
+  .content h2 {
+    font-size: 1.2rem;
+    margin: 8px 0;
+  }
+  
+  .scenario {
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .card {
+    transform-style: preserve-3d;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .choice, .back-btn, .back-home, .modal-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .card {
+    cursor: default;
+  }
+}
+
+/* Loading Screen */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.loading-overlay.active {
+  display: flex;
+}
+
+.loading-screen {
+  background: rgba(17, 24, 39, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 40px;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.loading-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-tip {
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin-bottom: 20px;
+  line-height: 1.6;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.loading-progress {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+.loading-continue-btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, var(--accent), #60a5fa);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+}
+
+.loading-continue-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+}
+
+/* Tip Banner */
+.tip-banner {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(56, 189, 248, 0.15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 90%;
+  z-index: 100;
+  animation: slideDown 0.4s ease;
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.2);
+}
+
+.tip-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.tip-text {
+  flex: 1;
+  color: var(--accent);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.tip-close {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.tip-close:hover {
+  opacity: 1;
+}
+
+/* Hint Button */
+.hint-button {
+  position: absolute;
+  bottom: 60px;
+  right: 20px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--accent);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hint-button:hover {
+  background: rgba(56, 189, 248, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+}
+
+.hint-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .tip-banner {
+    top: 70px;
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .loading-screen {
+    padding: 30px 20px;
+  }
+  
+  .hint-button {
+    bottom: 50px;
+    right: 15px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="scene" id="scene">
+  <div class="controls">
+    <a href="../../categories.html" class="back-home">← Back to Categories</a>
+    <div class="user-profile-btn" id="userProfileBtn" onclick="showUserProfile()">
+      <span id="userIcon">👤</span>
+      <span id="userName">Guest</span>
+    </div>
+    
+    <div class="progress-display" id="progressDisplay">
+      <span>Level: <span id="userLevel">1</span></span>
+      <span>GPA: <span id="userGPA">0.00</span></span>
+    </div>
+  </div>
+  
+  <div class="drop-zone" id="dropZone">
+    <div class="drop-zone-text">Drop JSON file here to load custom scenarios</div>
+  </div>
+
+  <div class="card" id="card">
+    <div class="face front">
+      <div class="header">
+        <button id="prevBtn" class="back-btn">←</button>
+        <span id="qNum" class="qnum"></span>
+      </div>
+      <div id="timerContainer" style="display: none; position: absolute; top: 20px; right: 20px; z-index: 10;"></div>
+      <div class="content" id="frontContent">
+        <div id="scenarioContainer" style="display: none;"></div>
+        <h2 id="qText"></h2>
+        <div id="qImageContainer"></div>
+        <div id="choices" class="choices"></div>
+      </div>
+      <button class="hint-button" id="hintButton" onclick="showHint()" style="display: none;">💡 Hint</button>
+      <span class="hint">tap to reveal</span>
+    </div>
+    <div class="face back">
+      <div class="content" id="backContent">
+        <h2>Answer</h2>
+        <div id="aImageContainer"></div>
+        <p id="aText"></p>
+      </div>
+      <span class="hint">tap to continue</span>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <div class="modal-title">Excellent Work!</div>
+    <div class="modal-message" id="modalMessage">Patient's condition is improving!</div>
+    <button class="modal-button" onclick="closeSuccessModal()">Continue</button>
+  </div>
+</div>
+
+<!-- Failure Modal -->
+<div class="modal-overlay" id="failureModal">
+  <div class="modal failure-modal">
+    <div class="modal-icon">💀</div>
+    <div class="modal-title">Critical Error</div>
+    <div class="modal-message" id="failureModalMessage">Patient's condition deteriorated!</div>
+    <button class="modal-button failure-button" onclick="closeFailureModal()">Continue</button>
+  </div>
+</div>
+
+<!-- Loading Screen with Tips -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-screen">
+    <div class="loading-icon">⏳</div>
+    <div class="loading-tip" id="loadingTip">Loading next scenario...</div>
+    <div class="loading-progress" id="loadingProgress">Question 1 of 10</div>
+    <button class="loading-continue-btn" id="loadingContinueBtn" onclick="hideLoadingScreen()">Continue</button>
+  </div>
+</div>
+
+<!-- Tip Banner (Auto-display) -->
+<div class="tip-banner" id="tipBanner" style="display: none;">
+  <div class="tip-icon">💡</div>
+  <div class="tip-text" id="tipText"></div>
+  <button class="tip-close" onclick="closeTipBanner()">×</button>
+</div>
+
+<!-- User Profile Modal -->
+<div class="modal-overlay" id="userProfileModal" style="display: none;">
+  <div class="modal" style="max-width: 500px;">
+    <div class="modal-title">User Profile & Settings</div>
+    <div style="padding: 20px;">
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; color: var(--accent);">Name:</label>
+        <input type="text" id="userNameInput" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.3); color: #e5e7eb; font-size: 1rem;" />
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; color: var(--accent);">Icon (Emoji):</label>
+        <input type="text" id="userIconInput" maxlength="2" style="width: 100px; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.3); color: #e5e7eb; font-size: 1.5rem; text-align: center;" />
+      </div>
+      <div style="margin-bottom: 20px; padding: 15px; background: rgba(56,189,248,.1); border-radius: 8px;">
+        <div style="margin-bottom: 10px;"><strong>Progress Stats:</strong></div>
+        <div>Level: <span id="profileLevel">1</span></div>
+        <div>Total Questions: <span id="totalQuestions">0</span></div>
+        <div>Correct Answers: <span id="totalCorrect">0</span></div>
+        <div>GPA: <span id="profileGPA">0.00</span></div>
+        <div>Tests Completed: <span id="testsCompleted">0</span></div>
+      </div>
+      <button class="modal-button" onclick="saveUserProfile()" style="width: 100%; margin-top: 10px;">Save Profile</button>
+      <button class="modal-button failure-button" onclick="closeUserProfile()" style="width: 100%; margin-top: 10px; background: rgba(239,68,68,.2);">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tone.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.js"></script>
+
+<script>
+// ============================================================================
+// TIPS DATA - Contextual tips for phlebotomy and general nursing
+// ============================================================================
+const phlebotomyTips = [
+  "Remember: Some patients have thicker veins - consider using a butterfly needle (21-23 gauge)",
+  "Slippery veins? Try warming the site with a warm compress or using a tourniquet",
+  "Always verify patient identity using two identifiers before venipuncture",
+  "For difficult draws, try the antecubital fossa (AC) or back of hand",
+  "Blood cultures require sterile technique - clean site with chlorhexidine and allow to dry",
+  "Order of draw matters! Follow CLSI guidelines: Blood cultures → Blue → Red → Gold → Green → Lavender → Gray",
+  "Never touch the puncture site after cleaning - maintain sterile field",
+  "Use a 30-45 degree angle for venipuncture, bevel up",
+  "If blood flow stops, try rotating the needle slightly or adjusting depth",
+  "Always anchor the vein below the puncture site to prevent rolling",
+  "For patients with fragile veins, use a smaller gauge needle (23-25 gauge)",
+  "Apply pressure for 2-3 minutes after draw, longer if patient is on anticoagulants",
+  "Label tubes immediately at the bedside - never pre-label",
+  "Mix additive tubes gently 5-10 times immediately after collection",
+  "For blood cultures, collect aerobic bottle first, then anaerobic",
+  "If you miss the vein, release tourniquet, apply pressure, and try the other arm",
+  "Use safety needles to prevent needlestick injuries",
+  "Dispose of sharps immediately in approved sharps container",
+  "Wear appropriate PPE: gloves, and face shield if splash risk",
+  "For pediatric patients, consider using smaller tubes and butterfly needles",
+  "Check for allergies before using antiseptics (iodine, chlorhexidine)",
+  "If patient is anxious, explain the procedure and use distraction techniques",
+  "For patients with IVs, avoid drawing from the same arm if possible",
+  "Always check tube expiration dates before use",
+  "Transport specimens promptly - some tests require immediate processing"
+];
+
+const generalNursingTips = [
+  "Double-check medication orders before administration",
+  "Always use two patient identifiers when providing care",
+  "Wash hands before and after every patient contact",
+  "Document immediately after care - never document before providing it",
+  "When in doubt, ask for clarification from supervisor or physician",
+  "Patient safety is always the top priority",
+  "Use teach-back method to verify patient understanding",
+  "Report any abnormal findings immediately",
+  "Maintain patient privacy and confidentiality at all times",
+  "Stay current with evidence-based practice guidelines"
+];
+
+// ============================================================================
+// SCENARIO DATA - ALL INLINE FOR EASY EDITING
+// ============================================================================
+// To add new scenarios, simply add a new entry to the flashcardDecks object below
+// Format: Each deck needs: title, test, category, and cards array
+// Each card needs: id, category, test, q (question), choices (array), correct (index), a (answer)
+// Optional: image, answerImage (for images)
+// Optional: scenario (text shown before question), timer (seconds), successMessage, failureMessage, causeOfDeath, timeoutMessage
+// Optional: tips (array of tip indices from phlebotomyTips or generalNursingTips)
+// ============================================================================
+
+const flashcardDecks = {
+  'pathophysiology': {
+    "title": "Pathophysiology",
+    "test": 1,
+    "category": "Pathophysiology",
+    "cards": [
+      {
+        "id": "q1",
+        "category": "Pathophysiology",
+        "test": 1,
+        "q": "What is the primary cause of Type 1 diabetes?",
+        "choices": ["Insulin resistance", "Autoimmune destruction of pancreatic beta cells", "Obesity"],
+        "correct": 1,
+        "a": "Type 1 diabetes is caused by autoimmune destruction of insulin-producing beta cells in the pancreas, leading to absolute insulin deficiency."
+      },
+      {
+        "id": "q2",
+        "category": "Pathophysiology",
+        "test": 1,
+        "q": "What happens during an asthma attack?",
+        "choices": ["Bronchodilation and increased airflow", "Bronchoconstriction, inflammation, and mucus production", "Alveolar collapse"],
+        "correct": 1,
+        "a": "During an asthma attack, the airways constrict (bronchoconstriction), become inflamed, and produce excess mucus, all of which narrow the airways and make breathing difficult."
+      },
+      {
+        "id": "q3",
+        "category": "Pathophysiology",
+        "test": 1,
+        "q": "What is the pathophysiology of heart failure?",
+        "choices": ["The heart pumps too effectively", "The heart cannot pump enough blood to meet body's needs", "The heart beats too fast"],
+        "correct": 1,
+        "a": "Heart failure occurs when the heart cannot pump sufficient blood to meet the body's metabolic needs, leading to fluid backup and organ dysfunction."
+      },
+      {
+        "id": "q4",
+        "category": "Pathophysiology",
+        "test": 1,
+        "q": "What causes the signs and symptoms of hypovolemic shock?",
+        "choices": ["Excess fluid in the body", "Inadequate tissue perfusion due to blood/fluid loss", "High blood pressure"],
+        "correct": 1,
+        "a": "Hypovolemic shock results from significant blood or fluid loss, causing inadequate tissue perfusion, which leads to organ dysfunction and the classic signs of shock."
+      },
+      {
+        "id": "q5",
+        "category": "Pathophysiology",
+        "test": 1,
+        "q": "What is the primary mechanism of action in hypertension?",
+        "choices": ["Decreased peripheral resistance", "Increased peripheral vascular resistance or increased cardiac output", "Vasodilation"],
+        "correct": 1,
+        "a": "Hypertension results from increased peripheral vascular resistance (narrowed vessels) or increased cardiac output (more blood pumped), or a combination of both."
+      }
+    ]
+  }
+};
+
+// ============================================================================
+// END OF SCENARIO DATA
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  const card = document.getElementById('card');
+  const qText = document.getElementById('qText');
+  const aText = document.getElementById('aText');
+  const qNum = document.getElementById('qNum');
+  const prevBtn = document.getElementById('prevBtn');
+  const choicesEl = document.getElementById('choices');
+  const dropZone = document.getElementById('dropZone');
+  const scene = document.getElementById('scene');
+  const frontContent = document.getElementById('frontContent');
+  const backContent = document.getElementById('backContent');
+  const qImageContainer = document.getElementById('qImageContainer');
+  const aImageContainer = document.getElementById('aImageContainer');
+  const scenarioContainer = document.getElementById('scenarioContainer');
+  const timerContainer = document.getElementById('timerContainer');
+  const successModal = document.getElementById('successModal');
+  const modalMessage = document.getElementById('modalMessage');
+  const failureModal = document.getElementById('failureModal');
+  const failureModalMessage = document.getElementById('failureModalMessage');
+
+  let deck = [];
+  let deckTitle = '';
+  let index = 0;
+  let showingAnswer = false;
+  let score = 0;
+  let selected = null;
+  let completed = false;
+  let timerInterval = null;
+  let timeRemaining = 0;
+  let timedOut = false;
+  let hintsUsed = 0;
+  const maxHintsPerQuestion = 3;
+  let currentTips = [];
+
+  // Load available categories from inline data
+  function loadCategories() {
+    Object.keys(flashcardDecks).forEach(key => {
+      const deck = flashcardDecks[key];
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = `${deck.title} - Test ${deck.test}`;
+      categorySelect.appendChild(option);
+    });
+  }
+
+  // Load deck from inline data or file
+  function loadDeck(deckKey) {
+    console.log('Loading deck:', deckKey);
+    
+    // Check if it's an inline deck
+    if (flashcardDecks[deckKey]) {
+      const data = flashcardDecks[deckKey];
+      deck = data.cards || [];
+      deckTitle = data.title || 'Quiz';
+      
+      if (deck.length === 0) {
+        showError('No cards found in deck');
+        return;
+      }
+      
+      index = 0;
+      score = 0;
+      completed = false;
+      showingAnswer = false;
+      card.classList.remove('is-flipped');
+      renderQuestion();
+      return;
+    }
+    
+    // If not found, try to load from file (for drag-and-drop)
+    showError('Deck not found. Use drag-and-drop to load a file.');
+  }
+
+
+  // Load deck from file content (JSON only) - for drag-and-drop
+  function loadDeckFromFile(fileContent, fileName = '') {
+    try {
+      const data = JSON.parse(fileContent);
+      if (!data.cards || data.cards.length === 0) {
+        throw new Error('No cards found in file');
+      }
+      deck = data.cards;
+      deckTitle = data.title || 'Custom Deck';
+      index = 0;
+      score = 0;
+      completed = false;
+      showingAnswer = false;
+      card.classList.remove('is-flipped');
+      renderQuestion();
+    } catch (e) {
+      showError('Invalid JSON file: ' + e.message);
+    }
+  }
+
+  function showError(msg) {
+    frontContent.innerHTML = `<div class="error">${msg}</div>`;
+    backContent.innerHTML = '';
+  }
+
+  function showLoading() {
+    frontContent.innerHTML = '<div class="loading">Loading scenarios...</div>';
+    backContent.innerHTML = '';
+  }
+
+  // Tips and Loading Screen Functions
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  const loadingTip = document.getElementById('loadingTip');
+  const loadingProgress = document.getElementById('loadingProgress');
+  const tipBanner = document.getElementById('tipBanner');
+  const tipText = document.getElementById('tipText');
+  const hintButton = document.getElementById('hintButton');
+
+  function getRandomTip(category = 'phlebotomy') {
+    const tipsArray = category.toLowerCase().includes('phlebotomy') ? phlebotomyTips : generalNursingTips;
+    return tipsArray[Math.floor(Math.random() * tipsArray.length)];
+  }
+
+  function showLoadingScreen(questionNum, totalQuestions) {
+    const tip = getRandomTip(deckTitle);
+    loadingTip.textContent = tip;
+    loadingProgress.textContent = `Question ${questionNum + 1} of ${totalQuestions}`;
+    loadingOverlay.classList.add('active');
+    
+    // Auto-advance after 2.5 seconds
+    setTimeout(() => {
+      if (loadingOverlay.classList.contains('active')) {
+        hideLoadingScreen();
+      }
+    }, 2500);
+  }
+
+  function hideLoadingScreen() {
+    loadingOverlay.classList.remove('active');
+    renderQuestion();
+  }
+
+  function showAutoTip(card) {
+    if (!card.tips || card.tips.length === 0) return;
+    
+    // Get tip from card's tips array (indices or direct strings)
+    let tip = '';
+    if (typeof card.tips[0] === 'number') {
+      // It's an index into phlebotomyTips
+      tip = phlebotomyTips[card.tips[0]] || generalNursingTips[card.tips[0]] || '';
+    } else {
+      // It's a direct tip string
+      tip = card.tips[0];
+    }
+    
+    if (tip) {
+      tipText.textContent = tip;
+      tipBanner.style.display = 'flex';
+      
+      // Auto-hide after 8 seconds
+      setTimeout(() => {
+        closeTipBanner();
+      }, 8000);
+    }
+  }
+
+  function closeTipBanner() {
+    tipBanner.style.display = 'none';
+  }
+
+  function showHint() {
+    if (hintsUsed >= maxHintsPerQuestion) {
+      alert('Maximum hints reached for this question!');
+      return;
+    }
+    
+    if (deck.length === 0 || index >= deck.length) return;
+    
+    const currentCard = deck[index];
+    let tip = '';
+    
+    // Check if card has specific tips
+    if (currentCard.tips && currentCard.tips.length > 0) {
+      const tipIndex = hintsUsed < currentCard.tips.length ? hintsUsed : currentCard.tips.length - 1;
+      if (typeof currentCard.tips[tipIndex] === 'number') {
+        tip = phlebotomyTips[currentCard.tips[tipIndex]] || generalNursingTips[currentCard.tips[tipIndex]] || '';
+      } else {
+        tip = currentCard.tips[tipIndex];
+      }
+    }
+    
+    // Fallback to random tip from category
+    if (!tip) {
+      tip = getRandomTip(deckTitle);
+    }
+    
+    tipText.textContent = tip;
+    tipBanner.style.display = 'flex';
+    hintsUsed++;
+    
+    // Update hint button if max reached
+    if (hintsUsed >= maxHintsPerQuestion) {
+      hintButton.disabled = true;
+      hintButton.textContent = '💡 Max Hints';
+    }
+    
+    // Auto-hide after 6 seconds
+    setTimeout(() => {
+      closeTipBanner();
+    }, 6000);
+  }
+
+  // Play success sound using Tone.js
+  function playSuccessSound() {
+    try {
+      const synth = new Tone.Synth({
+        oscillator: { type: "sine" },
+        envelope: { attack: 0.1, decay: 0.2, sustain: 0.5, release: 0.8 }
+      }).toDestination();
+      
+      const now = Tone.now();
+      synth.triggerAttackRelease("C5", "8n", now);
+      synth.triggerAttackRelease("E5", "8n", now + 0.1);
+      synth.triggerAttackRelease("G5", "8n", now + 0.2);
+    } catch (e) {
+      console.log('Sound playback failed:', e);
+    }
+  }
+
+  // Play failure sound - "woa woa woaaaa"
+  function playFailureSound() {
+    try {
+      const synth = new Tone.Synth({
+        oscillator: { type: "sawtooth" },
+        envelope: { attack: 0.05, decay: 0.3, sustain: 0.2, release: 0.5 }
+      }).toDestination();
+      
+      const now = Tone.now();
+      // "woa woa woaaaa" pattern
+      synth.triggerAttackRelease("C3", "4n", now);
+      synth.triggerAttackRelease("C3", "4n", now + 0.3);
+      synth.triggerAttackRelease("C2", "8n", now + 0.6);
+      synth.triggerAttackRelease("C2", "8n", now + 0.75);
+      synth.triggerAttackRelease("C2", "8n", now + 0.9);
+      synth.triggerAttackRelease("C2", "8n", now + 1.05);
+    } catch (e) {
+      console.log('Failure sound failed:', e);
+    }
+  }
+
+  // Play alert sound for failed test
+  function playAlertSound() {
+    try {
+      const synth = new Tone.Synth({
+        oscillator: { type: "square" },
+        envelope: { attack: 0.01, decay: 0.1, sustain: 0.3, release: 0.2 }
+      }).toDestination();
+      
+      const now = Tone.now();
+      // Alert pattern
+      for (let i = 0; i < 4; i++) {
+        synth.triggerAttackRelease("A4", "16n", now + i * 0.2);
+      }
+    } catch (e) {
+      console.log('Alert sound failed:', e);
+    }
+  }
+
+  // Play victory sound for passed test
+  function playVictorySound() {
+    try {
+      const synth = new Tone.Synth({
+        oscillator: { type: "sine" },
+        envelope: { attack: 0.1, decay: 0.2, sustain: 0.5, release: 0.8 }
+      }).toDestination();
+      
+      const now = Tone.now();
+      // Victory fanfare
+      synth.triggerAttackRelease("C5", "8n", now);
+      synth.triggerAttackRelease("E5", "8n", now + 0.15);
+      synth.triggerAttackRelease("G5", "8n", now + 0.3);
+      synth.triggerAttackRelease("C6", "4n", now + 0.45);
+    } catch (e) {
+      console.log('Victory sound failed:', e);
+    }
+  }
+
+  // Text-to-speech function
+  function speakText(text, voice = null) {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      if (voice) {
+        const voices = speechSynthesis.getVoices();
+        const selectedVoice = voices.find(v => v.name.includes(voice));
+        if (selectedVoice) utterance.voice = selectedVoice;
+      }
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      utterance.volume = 0.8;
+      speechSynthesis.speak(utterance);
+    }
+  }
+
+  // Show success modal
+  function showSuccessModal(message) {
+    const msg = message || "Patient's condition is improving! Vital signs stabilizing.";
+    modalMessage.textContent = msg;
+    successModal.classList.add('show');
+    speakText("Excellent work! " + msg);
+  }
+
+  // Show failure modal
+  function showFailureModal(message) {
+    const msg = message || "Patient's condition deteriorated!";
+    failureModalMessage.textContent = msg;
+    failureModal.classList.add('show');
+    speakText("Critical error. " + msg);
+  }
+
+  // Close success modal (global function for button)
+  window.closeSuccessModal = function() {
+    successModal.classList.remove('show');
+    speechSynthesis.cancel();
+  }
+
+  // Close failure modal (global function for button)
+  window.closeFailureModal = function() {
+    failureModal.classList.remove('show');
+    speechSynthesis.cancel();
+  }
+
+  // Close tip banner (global function for button)
+  window.closeTipBanner = function() {
+    if (tipBanner) tipBanner.style.display = 'none';
+  }
+
+  // Hide loading screen (global function for button)
+  window.hideLoadingScreen = function() {
+    hideLoadingScreen();
+  }
+
+  // Close modals when clicking outside
+  successModal.addEventListener('click', (e) => {
+    if (e.target === successModal) {
+      closeSuccessModal();
+    }
+  });
+
+  failureModal.addEventListener('click', (e) => {
+    if (e.target === failureModal) {
+      closeFailureModal();
+    }
+  });
+
+  // Initialize Tone.js context (required for audio)
+  Tone.start().then(() => {
+    console.log('Audio context started');
+  }).catch(e => {
+    console.log('Audio context failed:', e);
+  });
+
+  // Clear timer
+  function clearTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+    timerContainer.innerHTML = '';
+    timerContainer.style.display = 'none';
+  }
+
+  // Start timer
+  function startTimer(seconds, onTimeout) {
+    clearTimer();
+    timeRemaining = seconds;
+    timedOut = false;
+    
+    if (seconds <= 0) {
+      timerContainer.style.display = 'none';
+      return;
+    }
+    
+    timerContainer.style.display = 'block';
+    timerContainer.innerHTML = `<div class="timer" id="timerDisplay">${timeRemaining}</div>`;
+    const timerDisplay = document.getElementById('timerDisplay');
+    
+    timerInterval = setInterval(() => {
+      timeRemaining--;
+      timerDisplay.textContent = timeRemaining;
+      
+      if (timeRemaining <= 5) {
+        timerDisplay.classList.add('warning');
+      }
+      
+      if (timeRemaining <= 0) {
+        clearTimer();
+        timedOut = true;
+        onTimeout();
+      }
+    }, 1000);
+  }
+
+  function renderQuestion() {
+    if (deck.length === 0) {
+      showError('No scenarios loaded. Select a category or drop a JSON file to load custom scenarios.');
+      return;
+    }
+
+    clearTimer();
+    selected = null;
+    timedOut = false;
+    
+    const d = deck[index];
+    qText.textContent = d.q;
+    
+    // Show scenario if available
+    if (d.scenario) {
+      scenarioContainer.style.display = 'block';
+      scenarioContainer.innerHTML = `<div class="scenario"><div class="scenario-text">🚨 SCENARIO</div><div>${d.scenario}</div></div>`;
+    } else {
+      scenarioContainer.style.display = 'none';
+      scenarioContainer.innerHTML = '';
+    }
+    
+    // Build answer text (will show failure message if wrong)
+    let answerText = d.a;
+    if (d.failureMessage) {
+      answerText = d.a + (selected !== null && selected !== d.correct ? `<div class="failure-message">${d.failureMessage}</div>` : '');
+    }
+    aText.innerHTML = answerText;
+    
+    // Build question number display with ID, category, and test
+    const questionId = d.id || `q${index + 1}`;
+    const category = d.category || '';
+    const test = d.test !== undefined ? `Test ${d.test}` : '';
+    const parts = [questionId];
+    if (category) parts.push(category);
+    if (test) parts.push(test);
+    parts.push(`${index + 1}/${deck.length}`);
+    qNum.textContent = parts.join(' • ');
+    
+    prevBtn.style.display = index > 0 ? 'block' : 'none';
+    
+    // Start timer if available
+    if (d.timer && d.timer > 0) {
+      startTimer(d.timer, () => {
+        // Timeout callback
+        if (selected === null) {
+          const timeoutMessage = d.timeoutMessage || '⏱️ TIME OUT - Patient condition deteriorated due to delayed response!';
+          aText.innerHTML = d.a + `<div class="failure-message">${timeoutMessage}</div>`;
+          showingAnswer = true;
+          card.classList.add('is-flipped');
+        }
+      });
+    }
+
+    // Clear and render question image - always show question even if image fails
+    qImageContainer.innerHTML = '';
+    if (d.image) {
+      const img = document.createElement('img');
+      img.src = d.image;
+      img.className = 'card-image';
+      img.alt = 'Question image';
+      img.onerror = () => { 
+        // Image failed, but question still displays
+        qImageContainer.innerHTML = '';
+        console.log('Question image failed to load:', d.image);
+      };
+      img.onload = () => {
+        // Image loaded successfully
+      };
+      qImageContainer.appendChild(img);
+    }
+
+    // Clear and render answer image - always show answer even if image fails
+    aImageContainer.innerHTML = '';
+    if (d.answerImage) {
+      const img = document.createElement('img');
+      img.src = d.answerImage;
+      img.className = 'card-image';
+      img.alt = 'Answer image';
+      img.onerror = () => { 
+        // Image failed, but answer still displays
+        aImageContainer.innerHTML = '';
+        console.log('Answer image failed to load:', d.answerImage);
+      };
+      img.onload = () => {
+        // Image loaded successfully
+      };
+      aImageContainer.appendChild(img);
+    }
+
+    choicesEl.innerHTML = '';
+    selected = null;
+    hintsUsed = 0; // Reset hints for new question
+    closeTipBanner(); // Close any open tips
+    
+    // Show hint button
+    if (hintButton) {
+      hintButton.style.display = 'flex';
+      hintButton.disabled = false;
+      hintButton.textContent = '💡 Hint';
+    }
+    
+    // Show auto tip if available
+    showAutoTip(d);
+
+    if (d.choices && d.choices.length > 0) {
+      d.choices.forEach((c, i) => {
+        const div = document.createElement('div');
+        div.className = 'choice';
+        div.textContent = String.fromCharCode(65 + i) + '. ' + c;
+        div.onclick = e => {
+          e.stopPropagation();
+          if (selected !== null || completed || timedOut) return;
+          
+          clearTimer(); // Stop timer when answer is selected
+          selected = i;
+          document.querySelectorAll('.choice').forEach(el => el.classList.remove('selected', 'correct', 'wrong'));
+          div.classList.add('selected');
+          
+          if (i === d.correct) {
+            div.classList.add('correct');
+            score++;
+            
+            // Play success sound
+            playSuccessSound();
+            
+            // Show success message in answer
+            const successMsg = d.successMessage || '✅ Patient\'s condition is improving! Vital signs stabilizing.';
+            aText.innerHTML = d.a + `<div class="success-message">${successMsg}</div>`;
+            
+            // Auto-flip to answer after short delay
+            setTimeout(() => {
+              showingAnswer = true;
+              card.classList.add('is-flipped');
+              
+              // Show congratulations modal
+              setTimeout(() => {
+                showSuccessModal(successMsg);
+              }, 500);
+            }, 800);
+          } else {
+            div.classList.add('wrong');
+            if (d.correct !== undefined) {
+              const correctEl = choicesEl.children[d.correct];
+              if (correctEl) correctEl.classList.add('correct');
+            }
+            
+            // Play failure sound
+            playFailureSound();
+            
+            // Create death certificate with system time
+            const now = new Date();
+            const deathTime = now.toLocaleTimeString();
+            const deathDate = now.toLocaleDateString();
+            const causeOfDeath = d.causeOfDeath || 'Incorrect medical intervention';
+            
+            const deathCertificate = `
+              <div class="death-certificate">
+                <div class="death-header">💀 DEATH CERTIFICATE</div>
+                <div class="death-info">
+                  <div><strong>Time of Death:</strong> ${deathTime}</div>
+                  <div><strong>Date:</strong> ${deathDate}</div>
+                  <div><strong>Cause of Death:</strong> ${causeOfDeath}</div>
+                  <div><strong>Patient Status:</strong> DECEASED</div>
+                </div>
+              </div>
+            `;
+            
+            // Show failure message with death certificate
+            const failureMsg = d.failureMessage || '💀 CRITICAL ERROR: Patient\'s condition deteriorated due to incorrect assessment.';
+            aText.innerHTML = d.a + `<div class="failure-message">${failureMsg}</div>` + deathCertificate;
+            
+            // Auto-flip to answer after short delay
+            setTimeout(() => {
+              showingAnswer = true;
+              card.classList.add('is-flipped');
+              
+              // Show failure modal with text-to-speech
+              setTimeout(() => {
+                showFailureModal(failureMsg);
+              }, 500);
+            }, 800);
+          }
+        };
+        choicesEl.appendChild(div);
+      });
+    }
+  }
+
+  function showCompletion() {
+    completed = true;
+    clearTimer();
+    closeSuccessModal();
+    closeFailureModal();
+    
+    const percentage = Math.round((score / deck.length) * 100);
+    const passed = percentage >= 70;
+    
+    if (passed) {
+      playVictorySound();
+      qText.textContent = `Test Passed! 🎉`;
+      choicesEl.innerHTML = `
+        <p style="text-align: center; font-size: 1.2rem; color: var(--good);">
+          Your score: ${score} / ${deck.length} (${percentage}%)<br/>
+          <strong>Congratulations! You passed!</strong><br/>
+          <small style="opacity: 0.8;">Tap to restart</small>
+        </p>
+      `;
+      speakText(`Congratulations! You passed the test with a score of ${percentage} percent!`);
+    } else {
+      playAlertSound();
+      qText.textContent = `Test Failed ⚠️`;
+      choicesEl.innerHTML = `
+        <p style="text-align: center; font-size: 1.2rem; color: var(--bad);">
+          Your score: ${score} / ${deck.length} (${percentage}%)<br/>
+          <strong>You need 70% to pass. Study more and try again!</strong><br/>
+          <small style="opacity: 0.8;">Tap to restart</small>
+        </p>
+      `;
+      speakText(`Test failed. You scored ${percentage} percent. You need 70 percent to pass. Study more and try again.`);
+    }
+    
+    aText.textContent = '';
+    qImageContainer.innerHTML = '';
+    aImageContainer.innerHTML = '';
+  }
+
+  function advance() {
+    if (completed) {
+      completed = false;
+      index = 0;
+      score = 0;
+      clearTimer();
+      closeSuccessModal();
+      card.classList.remove('is-flipped');
+      showingAnswer = false;
+      renderQuestion();
+      return;
+    }
+
+    if (!showingAnswer) {
+      // Only flip if answer was selected or timer expired (but not if already auto-flipped)
+      if (selected !== null || timedOut) {
+        showingAnswer = true;
+        card.classList.add('is-flipped');
+      }
+    } else {
+      showingAnswer = false;
+      card.classList.remove('is-flipped');
+      clearTimer();
+      closeSuccessModal();
+      closeFailureModal();
+      speechSynthesis.cancel();
+      index++;
+      if (index >= deck.length) {
+        showCompletion();
+      } else {
+        // Show loading screen before next question
+        showLoadingScreen(index, deck.length);
+      }
+    }
+  }
+
+  prevBtn.onclick = e => {
+    e.stopPropagation();
+    if (index > 0 && !completed) {
+      index--;
+      showingAnswer = false;
+      card.classList.remove('is-flipped');
+      renderQuestion();
+    }
+  };
+
+  card.onclick = advance;
+
+  // Category selection
+
+  // Drag and drop
+  scene.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('active');
+  });
+
+  scene.addEventListener('dragleave', (e) => {
+    if (e.target === dropZone || !dropZone.contains(e.relatedTarget)) {
+      dropZone.classList.remove('active');
+    }
+  });
+
+  scene.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('active');
+    
+    const files = Array.from(e.dataTransfer.files);
+    const jsonFile = files.find(f => f.name.endsWith('.json'));
+    
+    if (jsonFile) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        loadDeckFromFile(event.target.result, jsonFile.name);
+      };
+      reader.onerror = () => {
+        showError('Failed to read file. Please try again.');
+      };
+      reader.readAsText(jsonFile);
+    } else {
+      showError('Please drop a JSON file');
+    }
+  });
+
+  // Auto-load pathophysiology category
+  loadDeck('pathophysiology');. Select a category or drop a JSON file.');
+  }
+});
+</script>
+
+</body>
+</html>

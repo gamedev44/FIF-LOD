@@ -14,7 +14,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-<title>Failure Is Fatal : Life Or Death</title>
+<title>Failure Is Fatal : Life Or Death - Phlebotomy</title>
 
 <!-- SEO Meta Tags -->
 <meta name="description" content="Intense scenario-based training simulator for nursing students. Experience real medical emergencies where every decision matters. High-stakes scenarios with timers and realistic patient outcomes." />
@@ -821,14 +821,12 @@ body {
 
 <div class="scene" id="scene">
   <div class="controls">
-    <a href="home.html" class="back-home">← Home</a>
+    <a href="../../categories.html" class="back-home">← Back to Categories</a>
     <div class="user-profile-btn" id="userProfileBtn" onclick="showUserProfile()">
       <span id="userIcon">👤</span>
       <span id="userName">Guest</span>
     </div>
-    <select id="categorySelect" class="category-select">
-      <option value="">Select Category...</option>
-    </select>
+    
     <div class="progress-display" id="progressDisplay">
       <span>Level: <span id="userLevel">1</span></span>
       <span>GPA: <span id="userGPA">0.00</span></span>
@@ -990,294 +988,6 @@ const generalNursingTips = [
 // ============================================================================
 
 const flashcardDecks = {
-  'anatomy-physiology': {
-    "title": "Anatomy & Physiology",
-    "test": 1,
-    "category": "Anatomy & Physiology",
-    "cards": [
-      {
-        "id": "q1",
-        "category": "Anatomy & Physiology",
-        "test": 1,
-        "scenario": "🚨 EMERGENCY: Your patient has suffered a head injury with minor trauma but is bleeding profusely. You need to assess their vital signs immediately!",
-        "timer": 30,
-        "q": "What is the normal range for adult blood pressure?",
-        "choices": ["90/60 - 120/80 mmHg", "100/70 - 140/90 mmHg", "120/80 - 140/90 mmHg"],
-        "correct": 0,
-        "a": "Normal adult blood pressure is typically 90/60 to 120/80 mmHg. Hypertension is diagnosed at 140/90 mmHg or higher.",
-        "failureMessage": "💀 CRITICAL ERROR: Patient's condition deteriorated due to incorrect assessment. Immediate intervention required!",
-        "causeOfDeath": "Hypovolemic shock secondary to uncontrolled bleeding",
-        "timeoutMessage": "⏱️ TIME CRITICAL: Patient went into shock due to delayed response. Blood loss has worsened!"
-      },
-      {
-        "id": "q2",
-        "category": "Anatomy & Physiology",
-        "test": 1,
-        "q": "Which chamber of the heart receives oxygenated blood from the lungs?",
-        "choices": ["Right atrium", "Left atrium", "Right ventricle"],
-        "correct": 1,
-        "a": "The left atrium receives oxygenated blood from the pulmonary veins. It then pumps blood to the left ventricle, which sends it to the systemic circulation."
-      },
-      {
-        "id": "q3",
-        "category": "Anatomy & Physiology",
-        "test": 1,
-        "q": "What is the normal adult respiratory rate?",
-        "choices": ["10-16 breaths per minute", "12-20 breaths per minute", "20-30 breaths per minute"],
-        "correct": 1,
-        "a": "Normal adult respiratory rate is 12-20 breaths per minute. Rates outside this range may indicate respiratory distress or other conditions."
-      },
-      {
-        "id": "q4",
-        "category": "Anatomy & Physiology",
-        "test": 1,
-        "q": "Which organ is responsible for filtering blood and producing urine?",
-        "choices": ["Liver", "Kidneys", "Pancreas"],
-        "correct": 1,
-        "a": "The kidneys filter waste products from the blood and produce urine. They also help regulate blood pressure, electrolyte balance, and red blood cell production."
-      },
-      {
-        "id": "q5",
-        "category": "Anatomy & Physiology",
-        "test": 1,
-        "q": "What is the normal range for adult heart rate (pulse)?",
-        "choices": ["50-80 bpm", "60-100 bpm", "80-120 bpm"],
-        "correct": 1,
-        "a": "Normal adult resting heart rate is 60-100 beats per minute. Athletes may have lower resting rates (40-60 bpm) due to cardiovascular fitness."
-      }
-    ]
-  },
-  
-  'pharmacology': {
-    "title": "Pharmacology",
-    "test": 1,
-    "category": "Pharmacology",
-    "cards": [
-      {
-        "id": "q1",
-        "category": "Pharmacology",
-        "test": 1,
-        "q": "What is the primary use of metformin?",
-        "choices": ["Hypertension", "Type 2 diabetes", "High cholesterol"],
-        "correct": 1,
-        "a": "Metformin is a first-line medication for Type 2 diabetes. It works by decreasing glucose production in the liver and improving insulin sensitivity."
-      },
-      {
-        "id": "q2",
-        "category": "Pharmacology",
-        "test": 1,
-        "q": "Which medication class is commonly used to treat hypertension and works by blocking angiotensin II?",
-        "choices": ["Beta blockers", "ACE inhibitors", "Calcium channel blockers"],
-        "correct": 1,
-        "a": "ACE (Angiotensin-Converting Enzyme) inhibitors block the conversion of angiotensin I to angiotensin II, resulting in vasodilation and reduced blood pressure."
-      },
-      {
-        "id": "q3",
-        "category": "Pharmacology",
-        "test": 1,
-        "q": "What is the antidote for warfarin (Coumadin) overdose?",
-        "choices": ["Naloxone", "Vitamin K", "Protamine sulfate"],
-        "correct": 1,
-        "a": "Vitamin K is the antidote for warfarin overdose. Warfarin works by inhibiting vitamin K-dependent clotting factors, so administering vitamin K reverses its effects."
-      },
-      {
-        "id": "q4",
-        "category": "Pharmacology",
-        "test": 1,
-        "q": "Which medication should be avoided in patients with a true penicillin allergy?",
-        "choices": ["Cephalexin", "Azithromycin", "Both cephalexin and azithromycin"],
-        "correct": 0,
-        "a": "Cephalexin (a cephalosporin) should be avoided in patients with penicillin allergy due to cross-reactivity. Azithromycin is a macrolide and is generally safe."
-      },
-      {
-        "id": "q5",
-        "category": "Pharmacology",
-        "test": 1,
-        "q": "What is the maximum safe dose of acetaminophen (Tylenol) per day for adults?",
-        "choices": ["2,000 mg", "3,000 mg", "4,000 mg"],
-        "correct": 2,
-        "a": "The maximum safe daily dose of acetaminophen for adults is 4,000 mg (4 grams). Exceeding this can cause severe liver damage."
-      }
-    ]
-  },
-  
-  'med-surg': {
-    "title": "Medical-Surgical Nursing",
-    "test": 1,
-    "category": "Medical-Surgical",
-    "cards": [
-      {
-        "id": "q1",
-        "category": "Medical-Surgical",
-        "test": 1,
-        "scenario": "🚨 CODE BLUE: Patient in room 204 is experiencing severe chest pain and appears distressed. You are the first responder!",
-        "timer": 20,
-        "q": "What is the priority nursing intervention for a patient experiencing chest pain?",
-        "choices": ["Administer pain medication", "Assess airway, breathing, and circulation", "Obtain vital signs"],
-        "correct": 1,
-        "a": "The priority is always ABC (Airway, Breathing, Circulation). Assess the patient's condition first, then notify the physician and prepare for potential interventions.",
-        "successMessage": "✅ Excellent response! Patient's airway is clear, breathing is stable, and circulation is maintained. Patient is responding well to treatment.",
-        "failureMessage": "💀 PATIENT DECLINED: Incorrect intervention led to cardiac arrest. Patient did not survive.",
-        "causeOfDeath": "Cardiac arrest due to delayed ABC assessment",
-        "timeoutMessage": "⏱️ CARDIAC ARREST: Patient went into cardiac arrest due to delayed response. Code team called!"
-      },
-      {
-        "id": "q2",
-        "category": "Medical-Surgical",
-        "test": 1,
-        "scenario": "⚠️ URGENT: Post-operative patient with confirmed DVT is requesting leg massage for comfort. You must intervene immediately!",
-        "timer": 25,
-        "q": "A patient with deep vein thrombosis (DVT) should avoid which activity?",
-        "choices": ["Walking", "Massaging the affected leg", "Elevating the leg"],
-        "correct": 1,
-        "a": "Massaging the affected leg is contraindicated in DVT as it could dislodge the clot, causing a pulmonary embolism. Patients should walk and elevate the leg.",
-        "successMessage": "✅ Correct intervention! Patient's leg is properly elevated, clot is stable, and risk of embolism is reduced. Patient is improving.",
-        "failureMessage": "💀 PULMONARY EMBOLISM: Patient developed massive PE after incorrect intervention. Patient expired.",
-        "causeOfDeath": "Massive pulmonary embolism secondary to DVT clot dislodgement",
-        "timeoutMessage": "⏱️ CRITICAL: Patient's condition worsened. Risk of embolism increased due to delayed action!"
-      },
-      {
-        "id": "q3",
-        "category": "Medical-Surgical",
-        "test": 1,
-        "q": "What is the most common sign of infection at a surgical site?",
-        "choices": ["Fever", "Redness, warmth, and purulent drainage", "Pain"],
-        "correct": 1,
-        "a": "Redness, warmth, swelling, and purulent (pus) drainage are classic signs of surgical site infection. Fever and pain may also be present but are less specific."
-      },
-      {
-        "id": "q4",
-        "category": "Medical-Surgical",
-        "test": 1,
-        "q": "Which position is recommended for a patient with respiratory distress?",
-        "choices": ["Supine", "High Fowler's (semi-upright)", "Trendelenburg"],
-        "correct": 1,
-        "a": "High Fowler's position (45-90 degrees) maximizes lung expansion and reduces the work of breathing for patients with respiratory distress."
-      },
-      {
-        "id": "q5",
-        "category": "Medical-Surgical",
-        "test": 1,
-        "scenario": "🚨 CRITICAL: Patient on continuous IV heparin is showing signs of excessive bleeding. You need to determine what to monitor!",
-        "timer": 15,
-        "q": "What should the nurse monitor most closely in a patient receiving continuous IV heparin?",
-        "choices": ["Blood pressure", "PTT (Partial Thromboplastin Time)", "Blood glucose"],
-        "correct": 1,
-        "a": "PTT should be monitored closely as heparin affects clotting time. The therapeutic range is typically 1.5-2.5 times the control value to prevent bleeding or clotting.",
-        "successMessage": "✅ Perfect! PTT levels are being monitored correctly. Patient's bleeding is controlled and heparin therapy is effective.",
-        "failureMessage": "💀 HEMORRHAGE: Patient developed severe bleeding complications. Critical intervention required!",
-        "causeOfDeath": "Severe hemorrhage due to unmonitored heparin therapy",
-        "timeoutMessage": "⏱️ EMERGENCY: Patient's bleeding worsened. Immediate medical attention needed!"
-      }
-    ]
-  },
-  
-  'fundamentals': {
-    "title": "Nursing Fundamentals",
-    "test": 1,
-    "category": "Fundamentals",
-    "cards": [
-      {
-        "id": "q1",
-        "category": "Fundamentals",
-        "test": 1,
-        "q": "What is the correct order of the nursing process?",
-        "choices": ["Assessment, Planning, Diagnosis, Implementation, Evaluation", "Assessment, Diagnosis, Planning, Implementation, Evaluation", "Diagnosis, Assessment, Planning, Implementation, Evaluation"],
-        "correct": 1,
-        "a": "The correct order is: Assessment, Diagnosis, Planning, Implementation, Evaluation (ADPIE). Always assess first to gather data."
-      },
-      {
-        "id": "q2",
-        "category": "Fundamentals",
-        "test": 1,
-        "q": "When should hand hygiene be performed?",
-        "choices": ["Before patient contact only", "After patient contact only", "Before and after patient contact"],
-        "correct": 2,
-        "a": "Hand hygiene should be performed before and after patient contact, after removing gloves, and whenever hands are visibly soiled to prevent infection transmission."
-      },
-      {
-        "id": "q3",
-        "category": "Fundamentals",
-        "test": 1,
-        "q": "What is the proper angle for intramuscular (IM) injection?",
-        "choices": ["45 degrees", "90 degrees", "15 degrees"],
-        "correct": 1,
-        "a": "IM injections are given at a 90-degree angle to ensure the medication reaches the muscle tissue. Subcutaneous injections use 45-90 degrees, and intradermal uses 15 degrees."
-      },
-      {
-        "id": "q4",
-        "category": "Fundamentals",
-        "test": 1,
-        "q": "Which site is preferred for IM injections in adults?",
-        "choices": ["Deltoid", "Vastus lateralis", "Dorsogluteal"],
-        "correct": 1,
-        "a": "The vastus lateralis (thigh) is preferred for IM injections as it's large, well-developed, and has no major nerves or blood vessels. It's safe for all age groups."
-      },
-      {
-        "id": "q5",
-        "category": "Fundamentals",
-        "test": 1,
-        "q": "What should be verified before administering any medication?",
-        "choices": ["Right patient, right medication, right dose", "Right patient, right medication, right dose, right route, right time", "Right patient, right medication, right time"],
-        "correct": 1,
-        "a": "The 'Five Rights' of medication administration are: Right patient, Right medication, Right dose, Right route, and Right time. Always verify all five before administration."
-      }
-    ]
-  },
-  
-  'pathophysiology': {
-    "title": "Pathophysiology",
-    "test": 1,
-    "category": "Pathophysiology",
-    "cards": [
-      {
-        "id": "q1",
-        "category": "Pathophysiology",
-        "test": 1,
-        "q": "What is the primary cause of Type 1 diabetes?",
-        "choices": ["Insulin resistance", "Autoimmune destruction of pancreatic beta cells", "Obesity"],
-        "correct": 1,
-        "a": "Type 1 diabetes is caused by autoimmune destruction of insulin-producing beta cells in the pancreas, leading to absolute insulin deficiency."
-      },
-      {
-        "id": "q2",
-        "category": "Pathophysiology",
-        "test": 1,
-        "q": "What happens during an asthma attack?",
-        "choices": ["Bronchodilation and increased airflow", "Bronchoconstriction, inflammation, and mucus production", "Alveolar collapse"],
-        "correct": 1,
-        "a": "During an asthma attack, the airways constrict (bronchoconstriction), become inflamed, and produce excess mucus, all of which narrow the airways and make breathing difficult."
-      },
-      {
-        "id": "q3",
-        "category": "Pathophysiology",
-        "test": 1,
-        "q": "What is the pathophysiology of heart failure?",
-        "choices": ["The heart pumps too effectively", "The heart cannot pump enough blood to meet body's needs", "The heart beats too fast"],
-        "correct": 1,
-        "a": "Heart failure occurs when the heart cannot pump sufficient blood to meet the body's metabolic needs, leading to fluid backup and organ dysfunction."
-      },
-      {
-        "id": "q4",
-        "category": "Pathophysiology",
-        "test": 1,
-        "q": "What causes the signs and symptoms of hypovolemic shock?",
-        "choices": ["Excess fluid in the body", "Inadequate tissue perfusion due to blood/fluid loss", "High blood pressure"],
-        "correct": 1,
-        "a": "Hypovolemic shock results from significant blood or fluid loss, causing inadequate tissue perfusion, which leads to organ dysfunction and the classic signs of shock."
-      },
-      {
-        "id": "q5",
-        "category": "Pathophysiology",
-        "test": 1,
-        "q": "What is the primary mechanism of action in hypertension?",
-        "choices": ["Decreased peripheral resistance", "Increased peripheral vascular resistance or increased cardiac output", "Vasodilation"],
-        "correct": 1,
-        "a": "Hypertension results from increased peripheral vascular resistance (narrowed vessels) or increased cardiac output (more blood pumped), or a combination of both."
-      }
-    ]
-  },
-  
   'phlebotomy': {
     "title": "Phlebotomy",
     "test": 1,
@@ -2004,7 +1714,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const qNum = document.getElementById('qNum');
   const prevBtn = document.getElementById('prevBtn');
   const choicesEl = document.getElementById('choices');
-  const categorySelect = document.getElementById('categorySelect');
   const dropZone = document.getElementById('dropZone');
   const scene = document.getElementById('scene');
   const frontContent = document.getElementById('frontContent');
@@ -2670,11 +2379,6 @@ document.addEventListener('DOMContentLoaded', () => {
   card.onclick = advance;
 
   // Category selection
-  categorySelect.onchange = (e) => {
-    if (e.target.value) {
-      loadDeck(e.target.value);
-    }
-  };
 
   // Drag and drop
   scene.addEventListener('dragover', (e) => {
@@ -2709,16 +2413,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Load categories and auto-load first one
-  loadCategories();
-  
-  // Auto-load first category
-  if (categorySelect.options.length > 1) {
-    const firstCategory = categorySelect.options[1].value;
-    categorySelect.value = firstCategory;
-    loadDeck(firstCategory);
-  } else {
-      showError('No scenarios found. Select a category or drop a JSON file.');
+  // Auto-load phlebotomy category
+  loadDeck('phlebotomy');. Select a category or drop a JSON file.');
   }
 });
 </script>
